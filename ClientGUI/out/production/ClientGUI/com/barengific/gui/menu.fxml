@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane alignment="center" hgap="10" prefHeight="501.0" prefWidth="651.0" vgap="10" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.barengific.gui.MenuController">
+   <children>
+      <AnchorPane prefHeight="624.0" prefWidth="652.0">
+         <children>
+            <TextField fx:id="txtRoom" layoutX="14.0" layoutY="321.0" promptText="RoomNo" />
+            <TextField fx:id="txtAtendees" layoutX="176.0" layoutY="321.0" promptText="Estimate Attendees" />
+            <TextField fx:id="txtEvent" layoutX="341.0" layoutY="321.0" promptText="Event Name" />
+            <TableView fx:id="tblBooking" layoutX="12.0" layoutY="54.0" prefHeight="260.0" prefWidth="628.0">
+              <columns>
+                <TableColumn fx:id="tblBookingid" prefWidth="75.0" text="ID" />
+                <TableColumn fx:id="tblRoom" prefWidth="75.0" text="RoomNo" />
+                  <TableColumn fx:id="tblStaffid" prefWidth="75.0" text="StaffID" />
+                  <TableColumn fx:id="tblRecurring" prefWidth="75.0" text="Recurring" />
+                  <TableColumn fx:id="tblsTime" prefWidth="75.0" text="sTime" />
+                  <TableColumn fx:id="tbleTime" prefWidth="75.0" text="eTime" />
+                  <TableColumn fx:id="tblAttendees" prefWidth="75.0" text="Attendees" />
+                  <TableColumn fx:id="tblEvent" prefWidth="75.0" text="EventName" />
+              </columns>
+            </TableView>
+            <DatePicker fx:id="txtsTime" layoutX="14.0" layoutY="358.0" promptText="Start Date" />
+            <DatePicker fx:id="txteTime" layoutX="201.0" layoutY="358.0" promptText="End Date" />
+            <Button fx:id="btnMake" layoutX="389.0" layoutY="358.0" mnemonicParsing="false" onAction="#MakeBooking" text="Make Booking" />
+            <Button fx:id="btnRefresh" layoutX="300.0" layoutY="14.0" mnemonicParsing="false" onAction="#RefreshBooking" text="Refresh Data" />
+            <TextArea fx:id="taFromServer" layoutX="169.0" layoutY="400.0" prefHeight="91.0" prefWidth="314.0" />
+         </children>
+      </AnchorPane>
+   </children>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+</GridPane>

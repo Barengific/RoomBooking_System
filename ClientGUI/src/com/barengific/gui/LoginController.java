@@ -1,9 +1,12 @@
 package com.barengific.gui;
 
 import com.barengific.clientside.Main;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  *
@@ -20,19 +23,26 @@ public class LoginController {
     TextField txtUsername;
     @FXML
     TextField txtPassword;
+    @FXML
+    Button btnLogs;
 
-    public void onLogin(){
-        System.out.println("aaaaa here button pressed");
-        System.out.println(ress);
-        res.setText(ress);
-        try {
-            Main.serverConn(txtUsername.getText(), txtPassword.getText());
-        }catch (Exception ex){
-            System.out.println(ex);
+    public void onLogin(ActionEvent event){
+        if(!txtUsername.getText().equals("") && !txtPassword.getText().equals("")){
+            try {
+                Main.serverConn(txtUsername.getText(), txtPassword.getText());
+                res.setText(ress);
+                //((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+            }catch (Exception ex){
+                System.out.println(ex);
+            }
+        }else{
+            res.setText("Username and password cannot be empty!");
         }
     }
 
-    public static void ressM(String a){
-        ress = a;
-    }
+//    public static void handleClose() {
+//        Stage stage = (Stage) res.getScene().getWindow();
+//        stage.close();
+//    }
+
 }

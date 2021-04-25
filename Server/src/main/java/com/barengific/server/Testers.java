@@ -70,35 +70,16 @@ public class Testers {
         
         if (userValid == true) {
             isAdmin(user.getUsername());
-            if (userPriv == true) {//checking for user priveledges
-                msg = new Message("confirmed_Super\n");
-                oos.writeObject(msg);
-                oos.flush();
-                msg = new Message("1) Book Room\n"
-                        + "2) View Bookings\n"
-                        + "3) View Available Rooms\n"
-                        + "4) Update Booking\n"
-                        + "5) Delete Booking\n"
-                        + "6) User Settings\n"
-                        + "7) Quit", new User(user.getUsername(), user.getPassword(), true));
+            if (userPriv == true) {//checking for user priveledges            
+                msg = new Message("confirmed_Super");
                 oos.writeObject(msg);
                 oos.flush();
                 userOptions();
-
             } else {
-                msg = new Message("confirmed_User\n");
-                oos.writeObject(msg);
-                oos.flush();
-                msg = new Message("1) Book Room\n"
-                        + "2) View Bookings\n"
-                        + "3) View Available Rooms\n"
-                        + "4) Update Booking\n"
-                        + "5) Delete Booking\n"
-                        + "7) Quit", new User(user.getUsername(), user.getPassword(), false));
+                msg = new Message("confirmed_User");
                 oos.writeObject(msg);
                 oos.flush();
                 userOptions();
-                //System.out.println("" + msg.getOps());
             }
         } else if (userValid == false) {
             msg = new Message("NOT_Confirmed");

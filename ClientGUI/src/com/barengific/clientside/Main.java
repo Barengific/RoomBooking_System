@@ -10,10 +10,13 @@ import java.net.Socket;
 
 import com.barengific.gui.LoginController;
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 
 /**
@@ -52,19 +55,46 @@ public class Main extends Application {
         socket = new Socket(host, port);
         oos = new ObjectOutputStream(socket.getOutputStream());
         ois = new ObjectInputStream(socket.getInputStream());
-
         try {
             Message msgs = (Message) ois.readObject();
             System.out.println(msgs.getOps());
-            LoginController.ress = "msgs.getOps()";
 
             user = new User(uname, upass);
             oos.writeObject(user);
             oos.flush();
 
+            msgs = (Message) ois.readObject();
+            System.out.println(msgs.getOps());
+            if(msgs.getOps().equals("confirmed_Super")){
+                System.out.println("supper");
+
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("../gui/menuAdmin.fxml"));
+                Parent root1 = (Parent) fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root1));
+                stage.show();
+
+            }else if(msgs.getOps().equals("confirmed_User")){
+                System.out.println("standard");
+
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("../gui/menu.fxml"));
+                Parent root1 = (Parent) fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root1));
+                stage.show();
+            }else if(msgs.getOps().equals("NOT_Confirmed")){
+                System.out.println("not valid");
+
+            }
+
+            LoginController.ress = "msgs.getOps()";
         } catch (Exception ex) {
             System.out.println(ex);
         }
+
+
+
+
     }
 
 

@@ -1,6 +1,6 @@
 package com.barengific.gui;
 
-public class AdminController {
+public class menuAdminController {
 
     public void refreshBooking(){
 

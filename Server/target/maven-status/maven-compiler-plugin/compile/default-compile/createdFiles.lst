@@ -5,7 +5,6 @@ com\barengific\Messages\Staff.class
 com\barengific\Messages\Message.class
 com\barengific\server\Testers$1.class
 com\barengific\server\DatabaseManager.class
-com\barengific\server\Teeee.class
 com\barengific\server\Testers.class
 com\barengific\Messages\User.class
 com\barengific\Messages\Room.class
