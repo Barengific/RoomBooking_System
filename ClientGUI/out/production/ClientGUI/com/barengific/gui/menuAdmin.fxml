@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" hgap="10" prefHeight="495.0" prefWidth="940.0" vgap="10" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.barengific.gui.menuAdminController">
+<GridPane alignment="center" hgap="10" prefHeight="495.0" prefWidth="940.0" vgap="10" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.barengific.gui.MenuAdminController">
    <children>
       <AnchorPane prefHeight="495.0" prefWidth="924.0">
          <children>
@@ -22,14 +22,14 @@
             <TextField fx:id="txtEvent" layoutX="341.0" layoutY="321.0" promptText="Event Name" />
             <TableView fx:id="tblBooking" layoutX="12.0" layoutY="54.0" prefHeight="260.0" prefWidth="628.0">
               <columns>
-                <TableColumn fx:id="tblBookingid" prefWidth="75.0" text="ID" />
-                <TableColumn fx:id="tblRoom" prefWidth="75.0" text="RoomNo" />
-                  <TableColumn fx:id="tblStaffid" prefWidth="75.0" text="StaffID" />
-                  <TableColumn fx:id="tblRecurring" prefWidth="75.0" text="Recurring" />
-                  <TableColumn fx:id="tblsTime" prefWidth="75.0" text="sTime" />
-                  <TableColumn fx:id="tbleTime" prefWidth="75.0" text="eTime" />
-                  <TableColumn fx:id="tblAttendees" prefWidth="75.0" text="Attendees" />
-                  <TableColumn fx:id="tblEvent" prefWidth="75.0" text="EventName" />
+                <TableColumn fx:id="tblBookingid" prefWidth="31.200014114379883" text="ID" />
+                <TableColumn fx:id="tblRoom" prefWidth="59.20001220703125" text="RoomNo" />
+                <TableColumn fx:id="tblStaffid" prefWidth="46.399986267089844" text="StaffID" />
+                <TableColumn fx:id="tblRecurring" prefWidth="66.4000244140625" text="Recurring" />
+                <TableColumn fx:id="tblsTime" prefWidth="115.20001220703125" text="sTime" />
+                <TableColumn fx:id="tbleTime" minWidth="9.5999755859375" prefWidth="98.4000244140625" text="eTime" />
+                <TableColumn fx:id="tblAttendees" minWidth="0.0" prefWidth="64.0" text="Attendees" />
+                <TableColumn fx:id="tblEvent" prefWidth="137.60000610351562" text="EventName" />
               </columns>
             </TableView>
             <DatePicker fx:id="txtsTime" layoutX="14.0" layoutY="358.0" promptText="Start Date" />
@@ -40,11 +40,11 @@
                   <Font name="System Bold" size="14.0" />
                </font></Button>
             <TextArea fx:id="taFromServer" layoutX="14.0" layoutY="405.0" prefHeight="75.0" prefWidth="382.0" promptText="From Server" wrapText="true" />
-            <TableView layoutX="654.0" layoutY="54.0" prefHeight="200.0" prefWidth="236.0">
+            <TableView fx:id="tblUser" layoutX="654.0" layoutY="54.0" prefHeight="200.0" prefWidth="236.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="Username" />
-                <TableColumn prefWidth="75.0" text="Password" />
-                  <TableColumn prefWidth="75.0" text="IsAdmin" />
+                <TableColumn fx:id="tblUsername" prefWidth="75.0" text="Username" />
+                <TableColumn fx:id="tblPassword" prefWidth="75.0" text="Password" />
+                  <TableColumn fx:id="tblIsAdmin" prefWidth="75.0" text="IsAdmin" />
               </columns>
             </TableView>
             <TextField layoutX="707.0" layoutY="263.0" promptText="Username" />

@@ -15,9 +15,10 @@ public class Booking implements Serializable {
     private int staffID;
     private int recurringID;
     private String sTime;
-    private String fTime;
+    private String eTime;
     private int estAttend;
     private String eventName;
+
     private ArrayList<Booking> bkng;
 
     public Booking() {
@@ -27,23 +28,23 @@ public class Booking implements Serializable {
         this.bookingID = bookingID;
     }
 
-    public Booking(int bookingID, int roomNo, int staffID, int recurringID, String sTime, String fTime, int estAttend, String eventName) {
+    public Booking(int bookingID, int roomNo, int staffID, int recurringID, String sTime, String eTime, int estAttend, String eventName) {
         this.bookingID = bookingID;
         this.roomNo = roomNo;
         this.staffID = staffID;
         this.recurringID = recurringID;
         this.sTime = sTime;
-        this.fTime = fTime;
+        this.eTime = eTime;
         this.estAttend = estAttend;
         this.eventName = eventName;
     }
 
-    public Booking(int roomNo, int staffID, int recurringID, String datetime, String fTime, int estAttend, String eventName) {
+    public Booking(int roomNo, int staffID, int recurringID, String sTime, String eTime, int estAttend, String eventName) {
         this.roomNo = roomNo;
         this.staffID = staffID;
         this.recurringID = recurringID;
-        this.sTime = datetime;
-        this.fTime = fTime;
+        this.sTime = sTime;
+        this.eTime = eTime;
         this.estAttend = estAttend;
         this.eventName = eventName;
     }
@@ -58,12 +59,12 @@ public class Booking implements Serializable {
         return bookingID;
     }
 
-    public String getStartTime() {
+    public String getSTime() {
         return sTime;
     }
 
-    public String getFinTime() {
-        return fTime;
+    public String getETime() {
+        return eTime;
     }
 
     public int getEstAttend() {
@@ -90,12 +91,12 @@ public class Booking implements Serializable {
         this.bookingID = bookingID;
     }
 
-    public void setDatetime(String sTime) {
+    public void setStime(String sTime) {
         this.sTime = sTime;
     }
 
-    public void setDuration(String fTime) {
-        this.fTime = fTime;
+    public void setETime(String fTime) {
+        this.eTime = fTime;
     }
 
     public void setEstAttend(int estAttend) {

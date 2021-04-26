@@ -93,8 +93,14 @@ public class Testers {
     static void userOptions() {
         try {//using switch case to handle client requests
             System.out.println("receiving options ");
+            
+            
+            msg = new Message(dbManager.viewBookings(),dbManager.viewUsers());
+            oos.writeObject(msg);
+            oos.flush();
+            
             while (true) {//server continues to server client with their options selected e.g. creating user, removing user,
-                System.out.println("heree");
+                System.out.println("heree at options");
                 msg = (Message) ois.readObject();
                 System.out.println(msg.getOps() + "-salv-");
                 switch (msg.getOps()) {
@@ -114,12 +120,12 @@ public class Testers {
                         String rstName = msg.getUname();
                         String rstPass = msg.getPwd();
                         System.out.println("rsting pass");
-                        dbManager.rstPass(rstName, rstPass);
+                        dbManager.resetUserPass(rstName, rstPass);
                         break;
                     case "Booking":
                         //msg = (Message) ois.readObject();
                         //System.out.println("" + msg.getEventName());
-                        //int bookingid = dbManager.bookRoom(msg.getRoomNo(), msg.getStaffID(), msg.getRecurringID(), msg.getStartTime(), msg.getFinTime(), msg.getEstAttend(), msg.getEventName());
+                        //int bookingid = dbManager.addBooking(msg.getRoomNo(), msg.getStaffID(), msg.getRecurringID(), msg.getStartTime(), msg.getFinTime(), msg.getEstAttend(), msg.getEventName());
                         //read booking info and ad to database
                         System.out.println("Room-booking one");
                         //bkng = new Booking(bookingid);
@@ -130,7 +136,7 @@ public class Testers {
                         break;
                     case "view_Booking":
                         System.out.println("viewing Booking");
-                        dbManager.viewBooking();
+                        dbManager.viewBookings();
                         bkng = new Booking(dbManager.bookings);
                         //msg = new Message("View_Booking", dbManager.bookings);
                         try {
@@ -182,7 +188,7 @@ public class Testers {
     }
 
     static public void isAdmin(String uname) throws SQLException {
-        if (dbManager.isAdmin(uname) == true) {
+        if (dbManager.validateUser(uname) == true) {
             userPriv = true;
         } else {
             userPriv = false;

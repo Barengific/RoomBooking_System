@@ -7,16 +7,48 @@ import java.util.ArrayList;
  *
  * @author barengific
  */
-
 public class Message implements Serializable {
+
     private static final long serialVersionUID = 192856L;
-    
+
     private String ops;
     User user;
     Room room;
     Staff staff;
     Booking booking;
-    
+
+    ArrayList<Booking> arrBooking;
+    ArrayList<User> arrUser;
+
+    /**
+     *
+     * @param arrBooking
+     */
+    public Message(ArrayList<Booking> arrBooking) {
+        this.arrBooking = arrBooking;
+    }
+
+    public Message(ArrayList<Booking> arrBooking, ArrayList<User> arrUser) {
+        this.arrBooking = arrBooking;
+        this.arrUser = arrUser;
+    }
+
+    public ArrayList<Booking> getArrBooking() {
+        return arrBooking;
+    }
+
+    public void setArrBooking(ArrayList<Booking> arrBooking) {
+        this.arrBooking = arrBooking;
+    }
+
+    public ArrayList<User> getArrUser() {
+        return arrUser;
+    }
+
+    public void setArrUser(ArrayList<User> arrUser) {
+        this.arrUser = arrUser;
+    }
+
     public Message(String ops, User user, Room room, Staff staff, Booking booking) {
         this.ops = ops;
         this.user = user;
@@ -24,29 +56,26 @@ public class Message implements Serializable {
         this.staff = staff;
         this.booking = booking;
     }
-    
+
     public Message(User user) {
         this.user = user;
     }
-    
+
     public Message(Room room) {
         this.room = room;
     }
-    
+
     public Message(Staff staff) {
         this.staff = staff;
     }
-    
+
     public Message(Booking booking) {
         this.booking = booking;
     }
-        
+
     public Message(String ops) {
         this.ops = ops;
     }
-
-
-    
 
     public User getUser() {
         return user;
@@ -79,14 +108,11 @@ public class Message implements Serializable {
     public void setBooking(Booking booking) {
         this.booking = booking;
     }
-    
-  
 
-    public Message(String ops, User user){
+    public Message(String ops, User user) {
         this.ops = ops;
         this.user = user;
     }
-
 
     public String getOps() {
         return ops;
@@ -96,14 +122,15 @@ public class Message implements Serializable {
         this.ops = ops;
     }
 
-
-    public String getUname(){
+    public String getUname() {
         return user.getUsername();
     }
-    public String getPwd(){
+
+    public String getPwd() {
         return user.getPassword();
     }
-    public boolean getIsAdmin(){
-        return user.isIsadmin();
+
+    public boolean getIsAdmin() {
+        return user.getIsAdmin();
     }
 }

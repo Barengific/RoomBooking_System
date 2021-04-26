@@ -86,6 +86,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="dynamic.classpath" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/com/barengific/gui" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -219,7 +220,9 @@
       <updated>1359379246138</updated>
       <workItem from="1359379250712" duration="1302000" />
       <workItem from="1619297351563" duration="8722000" />
-      <workItem from="1619359302827" duration="8516000" />
+      <workItem from="1619359302827" duration="10732000" />
+      <workItem from="1619388475125" duration="3210000" />
+      <workItem from="1619444371141" duration="10739000" />
     </task>
     <servers />
   </component>

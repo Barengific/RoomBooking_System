@@ -138,12 +138,12 @@ public class ServerMain {
                         String rstName = msg.getUname();
                         String rstPass = msg.getPwd();
                         System.out.println("rsting pass");
-                        dbManager.rstPass(rstName, rstPass);
+                        dbManager.resetUserPass(rstName, rstPass);
                         break;
                     case "Booking":
                         //msg = (Message) ois.readObject();
                         //System.out.println("" + msg.getEventName());
-                        //int bookingid = dbManager.bookRoom(msg.getRoomNo(), msg.getStaffID(), msg.getRecurringID(), msg.getStartTime(), msg.getFinTime(), msg.getEstAttend(), msg.getEventName());
+                        //int bookingid = dbManager.addBooking(msg.getRoomNo(), msg.getStaffID(), msg.getRecurringID(), msg.getStartTime(), msg.getFinTime(), msg.getEstAttend(), msg.getEventName());
                         //read booking info and ad to database
                         System.out.println("Room-booking one");
                         //bkng = new Booking(bookingid);
@@ -154,7 +154,7 @@ public class ServerMain {
                         break;
                     case "view_Booking":
                         System.out.println("viewing Booking");
-                        dbManager.viewBooking();
+                        dbManager.viewBookings();
                         bkng = new Booking(dbManager.bookings);
                         //msg = new Message("View_Booking", dbManager.bookings);
                         try {
@@ -209,8 +209,8 @@ public class ServerMain {
 
     static public void isAdmin(String uname) throws SQLException {
         DatabaseManager databaseManager = new DatabaseManager("admin12345", "pass", "jdbc:derby://localhost:1527/ppRoom");
-        databaseManager.isAdmin(uname);
-        if (databaseManager.isAdmin(uname) == true) {
+        databaseManager.validateUser(uname);
+        if (databaseManager.validateUser(uname) == true) {
             userPriv = true;
             System.out.println("user admin");
         } else {

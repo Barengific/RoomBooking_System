@@ -1,25 +1,28 @@
 package com.barengific.Messages;
+
 import java.io.Serializable;
-import java.util.ArrayList;
+
 /**
  *
  * @author barengific
  */
 public class User implements Serializable {
+
     private static final long serialVersionUID = 192856L;
     private String username;
     private String password;
-    private boolean isadmin;
+    private boolean isAdmin;
+
     /**
      *
      * @param username
      * @param password
-     * @param isadmin
+     * @param isAdmin
      */
-    public User(String username, String password, boolean isadmin) {
+    public User(String username, String password, boolean isAdmin) {
         this.username = username;
         this.password = password;
-        this.isadmin = isadmin;
+        this.isAdmin = isAdmin;
     }
 
     public User(String username, String password) {
@@ -27,13 +30,12 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public User(String username, String password, boolean isadmin, String header) {
+    public User(String username) {
         this.username = username;
-        this.password = password;
     }
 
     public User() {
-    }  
+    }
 
     public String getPassword() {
         return password;
@@ -43,12 +45,12 @@ public class User implements Serializable {
         return username;
     }
 
-    public boolean isIsadmin() {
-        return isadmin;
+    public boolean getIsAdmin() {
+        return isAdmin;
     }
 
-    public void setIsadmin(boolean isadmin) {
-        this.isadmin = isadmin;
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     public void setPassword(String password) {
