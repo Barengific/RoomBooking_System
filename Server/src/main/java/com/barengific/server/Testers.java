@@ -94,7 +94,6 @@ public class Testers {
         try {//using switch case to handle client requests
             System.out.println("receiving options ");
             
-            
             msg = new Message(dbManager.viewBookings(),dbManager.viewUsers());
             oos.writeObject(msg);
             oos.flush();
@@ -104,28 +103,35 @@ public class Testers {
                 msg = (Message) ois.readObject();
                 System.out.println(msg.getOps() + "-salv-");
                 switch (msg.getOps()) {
-                    case "crtUser":
+                    case "addUser":
                         String uname = msg.getUname();
                         String upass = msg.getPwd();
                         boolean isAdmin = msg.getIsAdmin();
                         System.out.println("creating user");
                         dbManager.addUser(uname, upass, isAdmin);
                         break;
-                    case "rmvUser":
+                    case "removeUser":
                         String rname = msg.getUname();
                         dbManager.removeUser(rname);
                         System.out.println(rname + " removed");
                         break;
-                    case "rstUser"://reset user password
+                    case "resetUser"://reset user password
                         String rstName = msg.getUname();
                         String rstPass = msg.getPwd();
                         System.out.println("rsting pass");
                         dbManager.resetUserPass(rstName, rstPass);
                         break;
-                    case "Booking":
-                        //msg = (Message) ois.readObject();
-                        //System.out.println("" + msg.getEventName());
-                        //int bookingid = dbManager.addBooking(msg.getRoomNo(), msg.getStaffID(), msg.getRecurringID(), msg.getStartTime(), msg.getFinTime(), msg.getEstAttend(), msg.getEventName());
+                    case "addBooking":
+                        msg = (Message) ois.readObject();
+                        System.out.println("ADDing");
+                        System.out.println("" + msg.getBooking().getEventName().toString());
+                        int bookingid = dbManager.addBooking(msg.getBooking().getRoomNo(), 
+                                msg.getBooking().getStaffID(), 
+                                msg.getBooking().getRecurringID(), 
+                                msg.getBooking().getSTime(), 
+                                msg.getBooking().getETime(), 
+                                msg.getBooking().getEstAttend(), 
+                                msg.getBooking().getEventName());
                         //read booking info and ad to database
                         System.out.println("Room-booking one");
                         //bkng = new Booking(bookingid);
@@ -134,7 +140,7 @@ public class Testers {
                         oos.writeObject(bkng);
                         oos.flush();
                         break;
-                    case "view_Booking":
+                    case "viewBooking":
                         System.out.println("viewing Booking");
                         dbManager.viewBookings();
                         bkng = new Booking(dbManager.bookings);
@@ -147,7 +153,7 @@ public class Testers {
                         }
                         System.out.println("View booking simple");
                         break;
-                    case "vAvail":
+                    case "viewRooms":
                         System.out.println("view available rooms");
                         break;
                     case "view_Booking_Details":
@@ -159,7 +165,7 @@ public class Testers {
                     case "delBook":
                         System.out.println("Deleting Booking");
                         break;
-                    case "viewRooms":
+                    case "viewRoomsss":
                         System.out.println("viewing Rooms");
                         dbManager.viewRooms();
                         try {

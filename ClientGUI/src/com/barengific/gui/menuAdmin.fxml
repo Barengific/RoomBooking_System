@@ -34,7 +34,7 @@
             </TableView>
             <DatePicker fx:id="txtsTime" layoutX="14.0" layoutY="358.0" promptText="Start Date" />
             <DatePicker fx:id="txteTime" layoutX="201.0" layoutY="358.0" promptText="End Date" />
-            <Button fx:id="btnMake" layoutX="389.0" layoutY="358.0" mnemonicParsing="false" onAction="#makeBooking" text="Make Booking" />
+            <Button fx:id="btnMake" layoutX="389.0" layoutY="358.0" mnemonicParsing="false" onAction="#addBooking" text="Make Booking" />
             <Button fx:id="btnRefresh" layoutX="353.0" layoutY="14.0" mnemonicParsing="false" onAction="#refreshBooking" prefHeight="34.0" prefWidth="142.0" text="Refresh Data">
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -47,12 +47,12 @@
                   <TableColumn fx:id="tblIsAdmin" prefWidth="75.0" text="IsAdmin" />
               </columns>
             </TableView>
-            <TextField layoutX="707.0" layoutY="263.0" promptText="Username" />
-            <TextField layoutX="707.0" layoutY="301.0" promptText="Password" />
-            <CheckBox layoutX="746.0" layoutY="334.0" mnemonicParsing="false" text="IsAdmin?" />
-            <Button layoutX="749.0" layoutY="358.0" mnemonicParsing="false" onAction="#addUser" text="Add User" />
-            <Button layoutX="640.0" layoutY="455.0" mnemonicParsing="false" onAction="#removeUser" text="Remove User" />
-            <Button layoutX="640.0" layoutY="417.0" mnemonicParsing="false" onAction="#removeBooking" text="Remove Booking" />
+            <TextField fx:id="txtAddUsername" layoutX="707.0" layoutY="263.0" promptText="Username" />
+            <TextField fx:id="txtAddUserpass" layoutX="707.0" layoutY="301.0" promptText="Password" />
+            <CheckBox fx:id="ckbxIsAdmin" layoutX="746.0" layoutY="334.0" mnemonicParsing="false" text="IsAdmin?" />
+            <Button fx:id="btnAddUser" layoutX="749.0" layoutY="358.0" mnemonicParsing="false" onAction="#addUser" text="Add User" />
+            <Button fx:id="btnRemoveUser" layoutX="640.0" layoutY="455.0" mnemonicParsing="false" onAction="#removeUser" text="Remove User" />
+            <Button fx:id="btnRemoveBooking" layoutX="640.0" layoutY="417.0" mnemonicParsing="false" onAction="#removeBooking" text="Remove Booking" />
             <TextField fx:id="txtRemoveBooking" layoutX="482.0" layoutY="417.0" promptText="Remove Booking ID" />
             <TextField fx:id="txtRemoveUser" layoutX="483.0" layoutY="455.0" promptText="Remove Username" />
          </children>

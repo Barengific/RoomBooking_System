@@ -35,7 +35,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../gui/login.fxml"));
-//        Scene scene = new Scene(root);
+//      Scene scene = new Scene(root);
         stage.setTitle("Hello World");
         stage.setScene(new Scene(root, 300, 275));
         stage.show();
@@ -112,8 +112,33 @@ public class Main extends Application {
             System.out.println("error at server CONN" + ex);
         }
 
+        serverConnCon(socket);
 
     }
 
+    public static void serverConnCon(Socket socket) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+//                    while (true) {
+//                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+    }
 
+    public static void clientInvocation (String header) {
+        Booking bk = new Booking(1,2,3,"12","a",22,"intellij");
+        try {
+            System.out.println("aaa");
+            oos.writeObject(new Message("addBooking",bk));
+            oos.flush();
+        }catch(Exception e){
+            System.out.println("at client inooov: " + e);
+        }
+    }
 }

@@ -76,6 +76,10 @@ public class Message implements Serializable {
     public Message(String ops) {
         this.ops = ops;
     }
+    public Message(String ops,Booking booking) {
+        this.ops = ops;
+        this.booking = booking;
+    }
 
     public User getUser() {
         return user;

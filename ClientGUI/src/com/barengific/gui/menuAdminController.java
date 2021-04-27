@@ -2,21 +2,38 @@ package com.barengific.gui;
 
 import com.barengific.Messages.Booking;
 import com.barengific.Messages.User;
+import com.barengific.clientside.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class MenuAdminController {
 
-    //@FXML
-    //TextField txtRoom;
-//    @FXML
-//    TextField txtAtendees;
+    @FXML
+    TextField txtRoom;
+    @FXML
+    TextField txtAtendees;
+    @FXML
+    TextField txtEvent;
+    @FXML
+    DatePicker txtsTime;
+    @FXML
+    DatePicker txteTime;
 
+    @FXML
+    TextField txtAddUsername;
+    @FXML
+    TextField txtAddUserpass;
+    @FXML
+    TextField txtRemoveBooking;
+    @FXML
+    TextField txtRemoveUser;
 
     @FXML
     private TableView<Booking> tblBooking;
@@ -48,12 +65,11 @@ public class MenuAdminController {
     private TableColumn<User, String> tblIsAdmin;
 
 
-
-
     public static ObservableList<Booking> olBooking = FXCollections.observableArrayList();
     public static ObservableList<User> olUser = FXCollections.observableArrayList();
 
     public void refreshBooking(ActionEvent event) {
+        //Main.state = "refreshBooking";
         tblBookingid.setCellValueFactory(new PropertyValueFactory<Booking, String>("bookingID"));
         tblRoom.setCellValueFactory(new PropertyValueFactory<Booking, String>("roomNo"));
         tblStaffid.setCellValueFactory(new PropertyValueFactory<Booking, String>("staffID"));
@@ -74,26 +90,25 @@ public class MenuAdminController {
         System.out.println("done");
     }
 
-
-//    public void refreshBooking(){
-//        //tblBookingid.setCellValueFactory(new String("123"));
-//        //tblAttendees.setCellValueFactory("123","134");
-//    }
-
-    public void makeBooking() {
-
+    public void addBooking() {
+        txtRoom.getText();
+        txtAtendees.getText();
+        txtEvent.getText();
+        //txtsTime.getChronology();
+        //txteTime.getChronology();
+        Main.clientInvocation("addBooking");
     }
 
     public void removeBooking() {
-
+        //Main.state = "removeBooking";
     }
 
     public void addUser() {
-
+        //Main.state = "addUser";
     }
 
     public void removeUser() {
-
+        //Main.state = "removeUser";
     }
 
 }

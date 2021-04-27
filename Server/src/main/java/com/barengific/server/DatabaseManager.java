@@ -71,7 +71,7 @@ public class DatabaseManager {
             System.out.println("failed at remove user dbmngr class" + e);
         }
     }
-    
+
     ArrayList<User> viewUsers() throws SQLException {
         Connection conn = getConnector();
         try {
@@ -81,7 +81,7 @@ public class DatabaseManager {
             while (rec.next()) {
                 users.add(new User(rec.getString(1), rec.getString(2), rec.getBoolean(3)));
                 for (User clntUsers : users) {
-                    System.out.println(clntUsers.getUsername()+ "-");
+                    //System.out.println(clntUsers.getUsername()+ "-");
                 }
             }
         } catch (Exception e) {
@@ -89,14 +89,18 @@ public class DatabaseManager {
         }
         return users;
     }
-    
+
     public int addBooking(int roomNo, int staffID, int recurringID, String sTime, String fTime, int estAttend, String eName) throws SQLException {
         Connection conn = getConnector();
 
-        Random rndmNo = new Random();
-        int rndmBooking = 1 + rndmNo.nextInt((1000000 - 1) + 1);
+        int newBookingNo = viewBookings().size()+1;
+        
+        Timestamp ssstime = new Timestamp(System.currentTimeMillis());
+        Timestamp eeetime = new Timestamp(System.currentTimeMillis());
 
-        System.out.println("" + rndmBooking);
+//        Random rndmNo = new Random();
+//        int rndmBooking = 1 + rndmNo.nextInt((1000000 - 1) + 1);
+//        System.out.println("" + rndmBooking);
         LocalDateTime ldt;
         try {
 
@@ -130,24 +134,23 @@ public class DatabaseManager {
 //                        }
 //                    } else {
                 try {
-                    System.out.println("qwert");
                     Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
                     System.out.println("qqqqq");
-                    String query = "INSERT INTO BOOKING (BOOKINGID,ROOMNO,STAFFID,RECURRINGID,STARTDATE,FINDATE,ESTATTENDES,EVENTNAME) " + "VALUEs (?,?,?,?,?,?,?,?)";
+                    String query = "INSERT INTO BOOKING (BOOKINGID, ROOMNO,STAFFID,RECURRINGID,STARTDATE,ENDDATE,ESTATTENDEES,EVENTNAME) " + "VALUEs (?,?,?,?,?,?,?,?)";
                     System.out.println("wwwwww");
                     PreparedStatement preparedStatement = conn.prepareStatement(query);
+                    System.out.println("ggggg");
+                    preparedStatement.setInt(1, newBookingNo);
                     System.out.println("eeeeee");
-                    preparedStatement.setInt(1, rndmBooking);
-                    System.out.println("rrrrrr");
                     preparedStatement.setInt(2, roomNo);
                     System.out.println("ttttt");
                     preparedStatement.setInt(3, staffID);
                     System.out.println("yyyyyy");
                     preparedStatement.setInt(4, recurringID);
                     System.out.println("uuuuuu");
-                    preparedStatement.setString(5, sTime);
+                    preparedStatement.setTimestamp(5, ssstime);
                     System.out.println("iiiii");
-                    preparedStatement.setString(6, fTime);
+                    preparedStatement.setTimestamp(6, eeetime);
                     System.out.println("oooooo");
                     preparedStatement.setInt(7, estAttend);
                     System.out.println("pppppp");
@@ -161,7 +164,7 @@ public class DatabaseManager {
                     conn.close();
 
                 } catch (Exception ex) {
-                    System.out.println("" + ex);
+                    System.out.println("error at adding bookss" + ex);
                 }
 //                        System.out.println("continueed");
 //                        continue;
@@ -172,10 +175,10 @@ public class DatabaseManager {
             }
         } catch (Exception ex) {
             ex.getCause();
-            rndmBooking = 1;
+            //rndmBooking = 1;
             System.out.println("Date time ISSUE at booking db mngnr" + ex);
         }
-        return rndmBooking;
+        return 1000;
     }
 
     public boolean verifyUser(String uname, String upass) throws SQLException {
@@ -283,8 +286,6 @@ public class DatabaseManager {
         }
         return bookings;
     }
-
-
 
     void resetUserPass(String rstUname, String rstPass) throws SQLException {
         Connection conn = getConnector();
