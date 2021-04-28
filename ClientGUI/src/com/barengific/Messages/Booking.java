@@ -21,9 +21,6 @@ public class Booking implements Serializable {
 
     private ArrayList<Booking> bkng;
 
-    public Booking() {
-    }
-
     public Booking(int bookingID) {
         this.bookingID = bookingID;
     }

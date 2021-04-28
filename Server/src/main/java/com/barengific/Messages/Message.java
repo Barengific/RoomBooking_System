@@ -18,6 +18,8 @@ public class Message implements Serializable {
     Booking booking;
 
     ArrayList<Booking> arrBooking;
+    ArrayList<Room> arrRoom;
+    ArrayList<Staff> arrStaff;
     ArrayList<User> arrUser;
 
     /**
@@ -28,9 +30,27 @@ public class Message implements Serializable {
         this.arrBooking = arrBooking;
     }
 
-    public Message(ArrayList<Booking> arrBooking, ArrayList<User> arrUser) {
+    public Message(ArrayList<Booking> arrBooking, ArrayList<Room> arrRoom, ArrayList<Staff> arrStaff, ArrayList<User> arrUser) {
         this.arrBooking = arrBooking;
+        this.arrRoom = arrRoom;
+        this.arrStaff = arrStaff;
         this.arrUser = arrUser;
+    }
+
+    public ArrayList<Room> getArrRoom() {
+        return arrRoom;
+    }
+
+    public void setArrRoom(ArrayList<Room> arrRoom) {
+        this.arrRoom = arrRoom;
+    }
+
+    public ArrayList<Staff> getArrStaff() {
+        return arrStaff;
+    }
+
+    public void setArrStaff(ArrayList<Staff> arrStaff) {
+        this.arrStaff = arrStaff;
     }
 
     public ArrayList<Booking> getArrBooking() {
@@ -76,8 +96,7 @@ public class Message implements Serializable {
     public Message(String ops) {
         this.ops = ops;
     }
-
-    public Message(String ops, Booking booking) {
+    public Message(String ops,Booking booking) {
         this.ops = ops;
         this.booking = booking;
     }

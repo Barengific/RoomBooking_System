@@ -1,0 +1,39 @@
+create table STAFF
+    (STAFFID integer NOT NULL,
+    FIRSTNAME varchar(20) NOT NULL,
+    LASTNAME varchar(20) NOT NULL,
+    OFFICENO integer NOT NULL,
+    EMAIL varchar(50) NOT NULL,
+    PHONENO integer NOT NULL,
+    PRIMARY KEY (STAFFID));
+
+create table USERS
+    (USERNAME varchar(20) NOT NULL,
+    STAFFID integer NOT NULL,
+    PASSWORD varchar(20) NOT NULL,
+    isadmin boolean NOT NULL,
+    PRIMARY KEY (USERNAME),
+    FOREIGN KEY (STAFFID)
+        REFERENCES STAFF (STAFFID));
+
+create table ROOM
+    (ROOMNO integer NOT NULL,
+    CAPACITY integer NOT NULL,
+    TYPES varchar(20) NOT NULL,
+    PHONENO integer NOT NULL,
+    PRIMARY KEY (ROOMNO));
+
+create table BOOKING
+    (BOOKINGID integer NOT NULL,
+    ROOMNO integer NOT NULL,
+    STAFFID integer NOT NULL,
+    RECURRINGID integer NOT NULL,
+    STARTDATE timestamp NOT NULL,
+    ENDDATE timestamp NOT NULL,
+    ESTATTENDEES integer NOT NULL,
+    EVENTNAME varchar(20) NOT NULL,
+    PRIMARY KEY (BOOKINGID),
+    FOREIGN KEY (ROOMNO)
+        REFERENCES ROOM (ROOMNO),
+    FOREIGN KEY (STAFFID)
+        REFERENCES STAFF (STAFFID));

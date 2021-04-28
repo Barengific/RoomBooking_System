@@ -93,15 +93,18 @@
     <property name="recentsLimit" value="5" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="com.barengific.clientside" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\baali\Documents\GitHub\RoomBooking_System\ClientGUI\src\com\barengific\gui" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\baali\Documents\GitHub\RoomBooking_System\ClientGUI\src\com\barengific\gui" />
       <recent name="C:\Users\baali\Documents\GitHub\RoomBooking_System\ClientGUI\src\com\barengific\clientside" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.barengific.clientside" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.barengific.gui" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\baali\Documents\GitHub\RoomBooking_System\ClientGUI\src\com\barengific\gui" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -223,7 +226,9 @@
       <workItem from="1619359302827" duration="10732000" />
       <workItem from="1619388475125" duration="3210000" />
       <workItem from="1619444371141" duration="18310000" />
-      <workItem from="1619487294239" duration="2106000" />
+      <workItem from="1619487294239" duration="2170000" />
+      <workItem from="1619528765259" duration="16703000" />
+      <workItem from="1619614525477" duration="2224000" />
     </task>
     <servers />
   </component>

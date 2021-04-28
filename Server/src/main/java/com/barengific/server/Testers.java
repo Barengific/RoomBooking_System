@@ -92,9 +92,10 @@ public class Testers {
 
     static void userOptions() {
         try {//using switch case to handle client requests
-            System.out.println("receiving options ");
+            //System.out.println("receiving options ");
             
-            msg = new Message(dbManager.viewBookings(),dbManager.viewUsers());
+            msg = new Message(dbManager.viewBookings(), dbManager.viewRooms(), 
+                              dbManager.viewStaffs(), dbManager.viewUsers());
             oos.writeObject(msg);
             oos.flush();
             

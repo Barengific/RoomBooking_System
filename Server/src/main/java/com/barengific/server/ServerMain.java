@@ -84,7 +84,7 @@ public class ServerMain {
                         + "4) Update Booking\n"
                         + "5) Delete Booking\n"
                         + "6) User Settings\n"
-                        + "7) Quit", new User(user.getUsername(), user.getPassword(), true));
+                        + "7) Quit", new User(user.getUsername(), user.getStaffID(), user.getPassword(), true));
                 oos.writeObject(msg);
                 oos.flush();
                 userOptions();
@@ -98,7 +98,7 @@ public class ServerMain {
                         + "3) View Available Rooms\n"
                         + "4) Update Booking\n"
                         + "5) Delete Booking\n"
-                        + "7) Quit", new User(user.getUsername(), user.getPassword(), false));
+                        + "7) Quit", new User(user.getUsername(), user.getStaffID(), user.getPassword(), false));
                 oos.writeObject(msg);
                 oos.flush();
                 userOptions();

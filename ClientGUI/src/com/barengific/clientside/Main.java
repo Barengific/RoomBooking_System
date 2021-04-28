@@ -1,8 +1,6 @@
 package com.barengific.clientside;
 
-import com.barengific.Messages.Booking;
-import com.barengific.Messages.Message;
-import com.barengific.Messages.User;
+import com.barengific.Messages.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,6 +13,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 
@@ -36,6 +35,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../gui/login.fxml"));
 //      Scene scene = new Scene(root);
+        stage.getIcons().add(new Image("file:icon.png"));
         stage.setTitle("Hello World");
         stage.setScene(new Scene(root, 300, 275));
         stage.show();
@@ -67,12 +67,13 @@ public class Main extends Application {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("../gui/menuAdmin.fxml"));
                 Parent root1 = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
+                stage.getIcons().add(new Image("file:icon.png"));
                 stage.setScene(new Scene(root1));
                 stage.show();
 
                 msgs = (Message) ois.readObject();
                 for (int i = 0; i < msgs.getArrBooking().size(); i++) {
-                    System.out.println(msgs.getArrBooking().get(i).getEventName());
+                    //System.out.println(msgs.getArrBooking().get(i).getEventName());
                     MenuAdminController.olBooking.add(new Booking(
                             msgs.getArrBooking().get(i).getBookingID(),
                             msgs.getArrBooking().get(i).getRoomNo(),
@@ -83,9 +84,30 @@ public class Main extends Application {
                             msgs.getArrBooking().get(i).getEstAttend(),
                             msgs.getArrBooking().get(i).getEventName()));
                 }
+                for (int i = 0; i < msgs.getArrRoom().size(); i++) {
+                    //System.out.println(msgs.getArrRoom().get(i).getType());
+                    MenuAdminController.olRoom.add(new Room(
+                            msgs.getArrRoom().get(i).getRoomNo(),
+                            msgs.getArrRoom().get(i).getCapacity(),
+                            msgs.getArrRoom().get(i).getType(),
+                            msgs.getArrRoom().get(i).getPhoneNo()));
+                }
+                for (int i = 0; i < msgs.getArrStaff().size(); i++) {
+                    //System.out.println(msgs.getArrStaff().get(i).getFirstName());
+                    MenuAdminController.olStaff.add(new Staff(
+                            msgs.getArrStaff().get(i).getStaffID(),
+                            msgs.getArrStaff().get(i).getFirstName(),
+                            msgs.getArrStaff().get(i).getLastName(),
+                            msgs.getArrStaff().get(i).getOffice(),
+                            msgs.getArrStaff().get(i).getEmail(),
+                            msgs.getArrStaff().get(i).getPhoneNo()));
+                }
                 for (int i = 0; i < msgs.getArrUser().size(); i++) {
+//                    System.out.println("checkss: " +msgs.getArrUser().get(i).getStaffID());
+//                    System.out.println(msgs.getArrUser().get(i).getUsername());
                     MenuAdminController.olUser.add(new User(
                             msgs.getArrUser().get(i).getUsername(),
+                            msgs.getArrUser().get(i).getStaffID(),
                             msgs.getArrUser().get(i).getPassword(),
                             msgs.getArrUser().get(i).getIsAdmin()));
                 }
@@ -100,6 +122,7 @@ public class Main extends Application {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("../gui/menu.fxml"));
                 Parent root1 = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
+                stage.getIcons().add(new Image("file:icon.png"));
                 stage.setScene(new Scene(root1));
                 stage.show();
             } else if (msgs.getOps().equals("NOT_Confirmed")) {

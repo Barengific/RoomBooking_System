@@ -1,8 +1,7 @@
 package com.barengific.Messages;
 
 import java.io.Serializable;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+
 /**
  *
  * @author barengific
@@ -27,8 +26,6 @@ public class Room implements Serializable {
         this.type = type;
         this.phoneNo = phoneNo;
     }
-
-
 
     public int getCapacity() {
         return capacity;
@@ -63,7 +60,6 @@ public class Room implements Serializable {
     }
 
     public Room() {
-        this.type = null;
     }
 
 }
