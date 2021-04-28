@@ -11,6 +11,8 @@ public class Message implements Serializable {
 
     private static final long serialVersionUID = 192856L;
 
+
+    private int rmID;
     private String ops;
     User user;
     Room room;
@@ -96,6 +98,30 @@ public class Message implements Serializable {
     public Message(String ops) {
         this.ops = ops;
     }
+
+    public Message(String ops, Room room) {
+        this.ops = ops;
+        this.room = room;
+    }
+
+    public Message(String ops, Staff staff) {
+        this.ops = ops;
+        this.staff = staff;
+    }
+
+    public int getRmID() {
+        return rmID;
+    }
+
+    public void setRmID(int rmID) {
+        this.rmID = rmID;
+    }
+
+    public Message(String ops, int rmID){
+        this.ops = ops;
+        this.rmID = rmID;
+    }
+
     public Message(String ops,Booking booking) {
         this.ops = ops;
         this.booking = booking;

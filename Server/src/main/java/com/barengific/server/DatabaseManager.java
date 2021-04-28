@@ -97,7 +97,7 @@ public class DatabaseManager {
         return newBookingNo;
     }
 
-    public void addRoom(int roomNo, int capacity, String type, int phoneNo) throws SQLException {
+    public void addRoom(int roomNo, int capacity, String type, long phoneNo) throws SQLException {
         Connection conn = getConnector();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -106,7 +106,7 @@ public class DatabaseManager {
             preparedStatement.setInt(1, roomNo);
             preparedStatement.setInt(2, capacity);
             preparedStatement.setString(3, type);
-            preparedStatement.setInt(4, phoneNo);
+            preparedStatement.setLong(4, phoneNo);
             preparedStatement.executeUpdate();
             System.out.println("room! " + type + " !Added");
             preparedStatement.close();
@@ -117,7 +117,7 @@ public class DatabaseManager {
         }
     }
 
-    public int addStaff(String firstName, String lastName, int officeNo, String email, int phoneNo) throws SQLException {
+    public int addStaff(String firstName, String lastName, int officeNo, String email, long phoneNo) throws SQLException {
         Connection conn = getConnector();
         int newStaffID = viewStaffs().size() + 1;
 
@@ -130,7 +130,7 @@ public class DatabaseManager {
             preparedStatement.setString(3, lastName);
             preparedStatement.setInt(4, officeNo);
             preparedStatement.setString(5, email);
-            preparedStatement.setInt(6, phoneNo);
+            preparedStatement.setLong(6, phoneNo);
             preparedStatement.executeUpdate();
             System.out.println("staff! " + firstName + " !Added");
             preparedStatement.close();
@@ -165,7 +165,7 @@ public class DatabaseManager {
         Connection conn = getConnector();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "DELETE FROM BOOKING WHERE BOOKINGID = " + "'" + bookingID + "'";
+            String query = "DELETE FROM BOOKING WHERE BOOKINGID = " + bookingID;
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.executeUpdate();
             System.out.println("booking! " + bookingID + " !Deleted");
@@ -181,7 +181,7 @@ public class DatabaseManager {
         Connection conn = getConnector();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "DELETE FROM ROOM WHERE ROOMNO = " + "'" + roomNo + "'";
+            String query = "DELETE FROM ROOM WHERE ROOMNO = " + roomNo;
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.executeUpdate();
             System.out.println("room! " + roomNo + " !Deleted");
@@ -197,7 +197,7 @@ public class DatabaseManager {
         Connection conn = getConnector();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "DELETE FROM STAFF WHERE STAFFID = " + "'" + staffID + "'";
+            String query = "DELETE FROM STAFF WHERE STAFFID = " + staffID;
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.executeUpdate();
             System.out.println("staff! " + staffID + " !Deleted");

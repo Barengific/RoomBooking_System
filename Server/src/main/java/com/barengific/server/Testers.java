@@ -34,7 +34,7 @@ public class Testers {
     public static void main(String[] args) throws SQLException, IOException {
         serverSocket = new ServerSocket(1234);
         System.out.println("Server Started at: " + new Date() + '\n');
-        
+
         while (true) {
             Socket clientSocket = serverSocket.accept();
             Thread thread = new Thread() {
@@ -46,7 +46,7 @@ public class Testers {
                         ois = new ObjectInputStream(clientSocket.getInputStream());
                         oos = new ObjectOutputStream(clientSocket.getOutputStream());
                         clientConn(clientSocket);
-                        
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -55,6 +55,7 @@ public class Testers {
             thread.start();
         }
     }
+
     //run for every new client
     public static void clientConn(Socket clntSckt) throws IOException, ClassNotFoundException, SQLException {
         msg = new Message("   _   _   _   _   _  \n"
@@ -64,10 +65,10 @@ public class Testers {
                 + "Type Username: " + "Type Password: ");
         oos.writeObject(msg);
         oos.flush();
-      
-        user = (User) ois.readObject();        
+
+        user = (User) ois.readObject();
         verifyUsers(user.getUsername(), user.getPassword());
-        
+
         if (userValid == true) {
             isAdmin(user.getUsername());
             if (userPriv == true) {//checking for user priveledges            
@@ -93,89 +94,104 @@ public class Testers {
     static void userOptions() {
         try {//using switch case to handle client requests
             //System.out.println("receiving options ");
-            
-            msg = new Message(dbManager.viewBookings(), dbManager.viewRooms(), 
-                              dbManager.viewStaffs(), dbManager.viewUsers());
+
+            msg = new Message(dbManager.viewBookings(), dbManager.viewRooms(),
+                    dbManager.viewStaffs(), dbManager.viewUsers());
             oos.writeObject(msg);
             oos.flush();
-            
+
             while (true) {//server continues to server client with their options selected e.g. creating user, removing user,
                 System.out.println("heree at options");
                 msg = (Message) ois.readObject();
                 System.out.println(msg.getOps() + "-salv-");
                 switch (msg.getOps()) {
-                    case "addUser":
-                        String uname = msg.getUname();
-                        String upass = msg.getPwd();
-                        boolean isAdmin = msg.getIsAdmin();
-                        System.out.println("creating user");
-                        dbManager.addUser(uname, upass, isAdmin);
-                        break;
-                    case "removeUser":
-                        String rname = msg.getUname();
-                        dbManager.removeUser(rname);
-                        System.out.println(rname + " removed");
+                    case "refresh":
+                        msg = new Message(dbManager.viewBookings(), dbManager.viewRooms(),
+                                dbManager.viewStaffs(), dbManager.viewUsers());
+                        oos.writeObject(msg);
+                        oos.flush();
+                        System.out.println("viewing allls");
                         break;
                     case "resetUser"://reset user password
-                        String rstName = msg.getUname();
-                        String rstPass = msg.getPwd();
                         System.out.println("rsting pass");
-                        dbManager.resetUserPass(rstName, rstPass);
-                        break;
-                    case "addBooking":
-                        msg = (Message) ois.readObject();
-                        System.out.println("ADDing");
-                        System.out.println("" + msg.getBooking().getEventName().toString());
-                        int bookingid = dbManager.addBooking(msg.getBooking().getRoomNo(), 
-                                msg.getBooking().getStaffID(), 
-                                msg.getBooking().getRecurringID(), 
-                                msg.getBooking().getSTime(), 
-                                msg.getBooking().getETime(), 
-                                msg.getBooking().getEstAttend(), 
-                                msg.getBooking().getEventName());
-                        //read booking info and ad to database
-                        System.out.println("Room-booking one");
-                        //bkng = new Booking(bookingid);
-//                        msg = new Message("Below is your BookingID / number ---- Please retain this for future reference: \n", bkng);
+                        dbManager.resetUserPass(msg.getUname(), msg.getPwd());
+                        msg = new Message("user: " + msg.getUname() + " was resetss");
                         oos.writeObject(msg);
-                        oos.writeObject(bkng);
                         oos.flush();
-                        break;
-                    case "viewBooking":
-                        System.out.println("viewing Booking");
-                        dbManager.viewBookings();
-                        bkng = new Booking(dbManager.bookings);
-                        //msg = new Message("View_Booking", dbManager.bookings);
-                        try {
-                            oos.writeObject(bkng);
-                            oos.flush();
-                        } catch (IOException ex) {
-                            System.out.println("" + ex);
-                        }
-                        System.out.println("View booking simple");
-                        break;
-                    case "viewRooms":
-                        System.out.println("view available rooms");
-                        break;
-                    case "view_Booking_Details":
-                        System.out.println("view available booking");
                         break;
                     case "updateBook":
                         System.out.println("");
                         break;
-                    case "delBook":
+
+                    // 
+                    //
+                    //
+                    case "removeBooking":
+                        System.out.println("FDe delling booking");
+                        dbManager.removeBooking(msg.getRmID());
                         System.out.println("Deleting Booking");
+                        msg = new Message("Booking IDss: " + msg.getRmID() + " removed");
+                        oos.writeObject(msg);
+                        oos.flush();
                         break;
-                    case "viewRoomsss":
-                        System.out.println("viewing Rooms");
-                        dbManager.viewRooms();
-                        try {
-                            oos.writeObject(dbManager.rooms);
-                            oos.flush();
-                        } catch (IOException ex) {
-                            System.out.println("" + ex);
-                        }
+                    case "removeRoom":
+                        dbManager.removeRoom(msg.getRmID());
+                        System.out.println("Deleting Roomms");
+                        msg = new Message("roomssnOOO: " + msg.getRmID() + " removed");
+                        oos.writeObject(msg);
+                        oos.flush();
+                        System.out.println("Deleting Room");
                         break;
+                    case "removeStaff":
+                        dbManager.removeStaff(msg.getRmID());
+                        System.out.println("Deleting stafffss");
+                        msg = new Message("staffIDDss: " + msg.getRmID() + " removed");
+                        oos.writeObject(msg);
+                        oos.flush();
+                        System.out.println("Deleting Staff");
+                        break;
+                    case "removeUser":
+                        dbManager.removeUser(msg.getUname());
+                        msg = new Message("user: " + msg.getUname() + " was removeds");
+                        oos.writeObject(msg);
+                        oos.flush();
+                        break;
+                    //                      
+                    //
+                    //
+                    case "addBooking":
+                        System.out.println("ADDing booking");
+                        int bookingID = dbManager.addBooking(msg.getBooking().getRoomNo(),
+                                msg.getBooking().getStaffID(), msg.getBooking().getRecurringID(),
+                                msg.getBooking().getSTime(), msg.getBooking().getETime(),
+                                msg.getBooking().getEstAttend(), msg.getBooking().getEventName());
+
+                        oos.writeObject("Here Booking number ---- retain for reference: " + bookingID);
+                        oos.flush();
+                        break;
+                    case "addRoom":
+                        dbManager.addRoom(msg.getRoom().getRoomNo(), msg.getRoom().getCapacity(),
+                                msg.getRoom().getType(), msg.getRoom().getPhoneNo());
+                        oos.writeObject(new Message("new roomss wadds"));
+                        oos.flush();
+                        System.out.println("room addsss");
+                        break;
+                    case "addStaff":
+                        oos.writeObject(new Message("new stafff adds \\n new staff ID: "
+                                + dbManager.addStaff(msg.getStaff().getFirstName(), msg.getStaff().getLastName(),
+                                        msg.getStaff().getOffice(), msg.getStaff().getEmail(), msg.getStaff().getPhoneNo())));
+                        oos.flush();
+                        System.out.println("stafff allls adds");
+                        break;
+                    case "addUser":
+                        System.out.println("creating user");
+                        dbManager.addUser(msg.getUname(), msg.getPwd(), msg.getIsAdmin());
+                        oos.writeObject(new Message("newss user: " + msg.getUname() + " was addeds"));
+                        oos.flush();
+                        break;
+                    //    
+                    //
+                    //
                     default:
                         System.out.println("no option found");
                         break;

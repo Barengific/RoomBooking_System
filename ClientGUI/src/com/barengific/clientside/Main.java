@@ -41,6 +41,11 @@ public class Main extends Application {
         stage.show();
         LoginController.ress = "msgs.getOps()";
 
+        System.out.println("Starting");
+        String aa = "12345678912345";
+        System.out.println(Long.getLong(aa));
+        System.out.println(Long.valueOf(aa));
+
     }
 
     /**
@@ -135,31 +140,126 @@ public class Main extends Application {
             System.out.println("error at server CONN" + ex);
         }
 
-        serverConnCon(socket);
+        //serverConnCon(socket);
 
     }
 
-    public static void serverConnCon(Socket socket) {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-//                    while (true) {
-//                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+    public static void serverRefresh(){
+        try{
+            oos.writeObject(new Message("refresh"));
+            oos.flush();
+
+            Message msgs = (Message) ois.readObject();
+//            MenuAdminController.olBooking.clear();
+//            MenuAdminController.olRoom.clear();
+//            MenuAdminController.olStaff.clear();
+//            MenuAdminController.olUser.clear();
+
+            for (int i = 0; i < msgs.getArrBooking().size(); i++) {
+                MenuAdminController.olBooking.add(new Booking(
+                        msgs.getArrBooking().get(i).getBookingID(),
+                        msgs.getArrBooking().get(i).getRoomNo(),
+                        msgs.getArrBooking().get(i).getStaffID(),
+                        msgs.getArrBooking().get(i).getRecurringID(),
+                        msgs.getArrBooking().get(i).getSTime(),
+                        msgs.getArrBooking().get(i).getETime(),
+                        msgs.getArrBooking().get(i).getEstAttend(),
+                        msgs.getArrBooking().get(i).getEventName()));
             }
-        };
-        thread.start();
+            for (int i = 0; i < msgs.getArrRoom().size(); i++) {
+                MenuAdminController.olRoom.add(new Room(
+                        msgs.getArrRoom().get(i).getRoomNo(),
+                        msgs.getArrRoom().get(i).getCapacity(),
+                        msgs.getArrRoom().get(i).getType(),
+                        msgs.getArrRoom().get(i).getPhoneNo()));
+            }
+            for (int i = 0; i < msgs.getArrStaff().size(); i++) {
+                MenuAdminController.olStaff.add(new Staff(
+                        msgs.getArrStaff().get(i).getStaffID(),
+                        msgs.getArrStaff().get(i).getFirstName(),
+                        msgs.getArrStaff().get(i).getLastName(),
+                        msgs.getArrStaff().get(i).getOffice(),
+                        msgs.getArrStaff().get(i).getEmail(),
+                        msgs.getArrStaff().get(i).getPhoneNo()));
+            }
+            for (int i = 0; i < msgs.getArrUser().size(); i++) {
+                MenuAdminController.olUser.add(new User(
+                        msgs.getArrUser().get(i).getUsername(),
+                        msgs.getArrUser().get(i).getStaffID(),
+                        msgs.getArrUser().get(i).getPassword(),
+                        msgs.getArrUser().get(i).getIsAdmin()));
+            }
+
+        }catch (Exception e){
+            System.out.println("rr at refresh server");
+        }
     }
+
+    public static void serverRemove(String objectRemove, int id){
+        try {
+            oos.writeObject(new Message(objectRemove,id));
+            oos.flush();
+
+            Message msgs = (Message) ois.readObject();
+            System.out.println(msgs.getOps());
+            MenuAdminController.qwert = msgs.getOps();
+
+        }catch (Exception e){
+            System.out.println("eerr at removess::: " + e);
+        }
+
+    }
+
+    public static void serverAddRoom(Room room){
+        try {
+            msg = new Message("addRoom", room);
+            oos.writeObject(msg);
+            oos.flush();
+
+            Message msgs = (Message) ois.readObject();
+            System.out.println(msgs.getOps());
+            MenuAdminController.qwert = msgs.getOps();
+
+        }catch (Exception e){
+            System.out.println("errr at adding rrooom: " + e);
+        }
+    }
+
+    public static void serverAdder(Message msg){
+        try {
+            oos.writeObject(msg);
+            oos.flush();
+
+            Message msgs = (Message) ois.readObject();
+            System.out.println(msgs.getOps());
+            MenuAdminController.qwert = msgs.getOps();
+
+        }catch(Exception e){
+            System.out.println("errroe at eerverADDDEERR " + e);
+        }
+    }
+
+//    public static void serverConnCon(Socket socket) {
+//        Thread thread = new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+////                    while (true) {
+////                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        };
+//        thread.start();
+//    }
 
     public static void clientInvocation (String header) {
-        Booking bk = new Booking(1,2,3,"12","a",22,"intellij");
+        //Booking bk = new Booking(1,2,3,"12","a",22,"intellij");
         try {
             System.out.println("aaa");
-            oos.writeObject(new Message("addBooking",bk));
-            oos.flush();
+            //oos.writeObject(new Message("addBooking",bk));
+            //oos.flush();
         }catch(Exception e){
             System.out.println("at client inooov: " + e);
         }

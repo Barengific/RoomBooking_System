@@ -87,7 +87,7 @@
     <property name="dynamic.classpath" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/com/barengific/gui" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
@@ -228,7 +228,7 @@
       <workItem from="1619444371141" duration="18310000" />
       <workItem from="1619487294239" duration="2170000" />
       <workItem from="1619528765259" duration="16703000" />
-      <workItem from="1619614525477" duration="2224000" />
+      <workItem from="1619614525477" duration="19673000" />
     </task>
     <servers />
   </component>

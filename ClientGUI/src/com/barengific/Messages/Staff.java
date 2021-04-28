@@ -34,6 +34,14 @@ public class Staff implements Serializable {
         this.phoneNo = phoneNo;
     }
 
+    public Staff(String firstName, String lastName, int office, String email, long phoneNo) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.office = office;
+        this.email = email;
+        this.phoneNo = phoneNo;
+    }
+
     public String getEmail() {
         return email;
     }
