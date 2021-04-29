@@ -200,15 +200,25 @@ public class MenuAdminController {
         //tblBooking.setItems(data);
     }
 
+    public void resetUser() {
+        Main.serverInvoke(new Message("resetUser", new User(txtAddUsername.getText(), txtAddUserpass.getText())));
+        taFromServer.setText(qwert);
+
+        txtAddUsername.clear();
+        txtAddUserpass.clear();
+    }
+
+    //
+    //adds
+    //
     public void addBooking() {
         String ssDateTime = txtsTime.getValue().toString() + " " + txtAddsHour.getText() + ":00.0";
         String eeDateTime = txteTime.getValue().toString() + " " + txtAddeHour.getText() + ":00.0";
 
-        Main.serverAdder(new Message("addBooking", new Booking(Integer.parseInt(txtAddRoomBooking.getText()), staffi,
+        Main.serverInvoke(new Message("addBooking", new Booking(Integer.parseInt(txtAddRoomBooking.getText()), staffi,
                 Integer.parseInt(txtAddRecurring.getText()), ssDateTime, eeDateTime,
                 Integer.parseInt(txtAtendees.getText()), txtEvent.getText())));
 
-        System.out.println("addding -booking- ");
         taFromServer.setText(qwert);
 
         txtAddRoomBooking.clear();
@@ -217,14 +227,15 @@ public class MenuAdminController {
         txteTime.getEditor().clear();
         txtAtendees.clear();
         txtEvent.clear();
+        txtAddsHour.clear();
+        txtAddeHour.clear();
     }
 
     public void addRoom() {
         //check whether roomno, capacity and phoneno are int before senind to server
-        Main.serverAdder(new Message("addRoom", new Room(Integer.parseInt(txtRoomNo.getText()), Integer.parseInt(txtCapacity.getText()),
+        Main.serverInvoke(new Message("addRoom", new Room(Integer.parseInt(txtRoomNo.getText()), Integer.parseInt(txtCapacity.getText()),
                 txtType.getText(), Integer.parseInt(txtRoomPhone.getText()))));
 
-        System.out.println("addding -room- ");
         taFromServer.setText(qwert);
 
         txtRoomNo.clear();
@@ -234,10 +245,9 @@ public class MenuAdminController {
     }
 
     public void addStaff() {
-        Main.serverAdder(new Message("addStaff", new Staff(txtFirstname.getText(), txtLastname.getText(),
+        Main.serverInvoke(new Message("addStaff", new Staff(txtFirstname.getText(), txtLastname.getText(),
                 Integer.parseInt(txtOffice.getText()), txtEmail.getText(), Long.parseLong(txtStaffPhone.getText()))));
 
-        System.out.println("adding stafff -- ");
         taFromServer.setText(qwert);
 
         txtFirstname.clear();
@@ -249,10 +259,8 @@ public class MenuAdminController {
 
     public void addUser() {
         //need to find staff idd
-        Main.serverAdder(new Message("addUser", new User(txtAddUsername.getText(), Integer.parseInt(txtAdduserStaff.getText()),
+        Main.serverInvoke(new Message("addUser", new User(txtAddUsername.getText(), Integer.parseInt(txtAdduserStaff.getText()),
                 txtAddUserpass.getText(), ckbxIsAdmin.isSelected())));
-        //User( username, staffID, password, isAdmin)
-        System.out.println("adding users -- ");
         taFromServer.setText(qwert);
 
         txtAddUsername.clear();
@@ -261,42 +269,36 @@ public class MenuAdminController {
         ckbxIsAdmin.disarm();
     }
 
+    //
+    //removes
+    //
     public void removeBooking() {
         //catch exception if booking id is not a integer
-        Main.serverRemove("removeBooking", Integer.parseInt(txtRemoveBooking.getText()));
+        Main.serverInvoke(new Message("removeBooking", Integer.parseInt(txtRemoveBooking.getText())));
         taFromServer.setText(qwert);
 
         txtRemoveBooking.clear();
     }
 
     public void removeRoom() {
-        Main.serverRemove("removeRoom", Integer.parseInt(txtRemoveRoom.getText()));
+        Main.serverInvoke(new Message("removeRoom", Integer.parseInt(txtRemoveRoom.getText())));
         taFromServer.setText(qwert);
 
         txtRemoveRoom.clear();
     }
 
     public void removeStaff() {
-        Main.serverRemove("removeStaff", Integer.parseInt(txtRemoveStaff.getText()));
+        Main.serverInvoke(new Message("removeStaff", Integer.parseInt(txtRemoveStaff.getText())));
         taFromServer.setText(qwert);
 
         txtRemoveStaff.clear();
     }
 
     public void removeUser() {
-        Main.serverAdder(new Message("removeUser", txtRemoveUser.getText()));
+        Main.serverInvoke(new Message("removeUser", txtRemoveUser.getText()));
         taFromServer.setText(qwert);
 
         txtRemoveUser.clear();
-    }
-
-    public void resetUser() {
-        Main.serverAdder(new Message("resetUser", new User(txtAddUsername.getText(),txtAddUserpass.getText())));
-        taFromServer.setText(qwert);
-
-        txtAddUsername.clear();
-        txtAddUserpass.clear();
-
     }
 
 }

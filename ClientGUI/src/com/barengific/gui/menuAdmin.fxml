@@ -58,13 +58,13 @@
                   <TableColumn fx:id="tblRoomPhone" prefWidth="92.0" text="Phone" />
               </columns>
             </TableView>
-            <TableView fx:id="tblStaff" layoutX="584.0" layoutY="407.0" prefHeight="200.0" prefWidth="412.0">
+            <TableView fx:id="tblStaff" layoutX="584.0" layoutY="407.0" prefHeight="200.0" prefWidth="430.0">
               <columns>
                 <TableColumn fx:id="tblStaffid" prefWidth="51.199981689453125" text="Staff ID" />
-                <TableColumn fx:id="tblName" prefWidth="44.0" text="Name" />
-                  <TableColumn fx:id="tblOffice" prefWidth="66.4000244140625" text="Office No#" />
-                  <TableColumn fx:id="tblEmail" prefWidth="152.79998779296875" text="Email" />
-                  <TableColumn fx:id="tblStaffPhone" prefWidth="91.2000732421875" text="Phone No#" />
+                <TableColumn fx:id="tblName" prefWidth="55.199951171875" text="Name" />
+                  <TableColumn fx:id="tblOffice" prefWidth="70.39996337890625" text="Office No#" />
+                  <TableColumn fx:id="tblEmail" prefWidth="156.00006103515625" text="Email" />
+                  <TableColumn fx:id="tblStaffPhone" prefWidth="94.39990234375" text="Phone No#" />
               </columns>
             </TableView>
             <VBox fx:id="vboxStaffDetails" layoutX="478.0" layoutY="435.0" prefHeight="142.0" prefWidth="100.0">

@@ -66,8 +66,7 @@ public class Main extends Application {
             MenuAdminController.usern = uname;
             MenuAdminController.userp = upass;
             MenuAdminController.staffi = msgs.getRmID();
-
-
+            
             if (msgs.getOps().equals("confirmed_Super")) {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("../gui/menuAdmin.fxml"));
                 Parent root1 = (Parent) fxmlLoader.load();
@@ -77,49 +76,8 @@ public class Main extends Application {
                 stage.show();
                 MenuAdminController.isa = true;
                 msgs = (Message) ois.readObject();
-                for (int i = 0; i < msgs.getArrBooking().size(); i++) {
-                    //System.out.println(msgs.getArrBooking().get(i).getEventName());
-                    MenuAdminController.olBooking.add(new Booking(
-                            msgs.getArrBooking().get(i).getBookingID(),
-                            msgs.getArrBooking().get(i).getRoomNo(),
-                            msgs.getArrBooking().get(i).getStaffID(),
-                            msgs.getArrBooking().get(i).getRecurringID(),
-                            msgs.getArrBooking().get(i).getSTime(),
-                            msgs.getArrBooking().get(i).getETime(),
-                            msgs.getArrBooking().get(i).getEstAttend(),
-                            msgs.getArrBooking().get(i).getEventName()));
-                }
-                for (int i = 0; i < msgs.getArrRoom().size(); i++) {
-                    //System.out.println(msgs.getArrRoom().get(i).getType());
-                    MenuAdminController.olRoom.add(new Room(
-                            msgs.getArrRoom().get(i).getRoomNo(),
-                            msgs.getArrRoom().get(i).getCapacity(),
-                            msgs.getArrRoom().get(i).getType(),
-                            msgs.getArrRoom().get(i).getPhoneNo()));
-                }
-                for (int i = 0; i < msgs.getArrStaff().size(); i++) {
-                    //System.out.println(msgs.getArrStaff().get(i).getFirstName());
-                    MenuAdminController.olStaff.add(new Staff(
-                            msgs.getArrStaff().get(i).getStaffID(),
-                            msgs.getArrStaff().get(i).getFirstName(),
-                            msgs.getArrStaff().get(i).getLastName(),
-                            msgs.getArrStaff().get(i).getOffice(),
-                            msgs.getArrStaff().get(i).getEmail(),
-                            msgs.getArrStaff().get(i).getPhoneNo()));
-                }
-                for (int i = 0; i < msgs.getArrUser().size(); i++) {
-//                    System.out.println("checkss: " +msgs.getArrUser().get(i).getStaffID());
-//                    System.out.println(msgs.getArrUser().get(i).getUsername());
-                    MenuAdminController.olUser.add(new User(
-                            msgs.getArrUser().get(i).getUsername(),
-                            msgs.getArrUser().get(i).getStaffID(),
-                            msgs.getArrUser().get(i).getPassword(),
-                            msgs.getArrUser().get(i).getIsAdmin()));
-                }
 
-                //MenuAdminController.data = msgs.getData();
-                //new Booking(1, 12, 11, 98,"mon","tue",10,"rollball");
-                //MenuAdminController.refreshBooking();
+                tableFill(msgs);
 
             }
             else if (msgs.getOps().equals("confirmed_User")) {
@@ -139,7 +97,6 @@ public class Main extends Application {
         } catch (Exception ex) {
             System.out.println("error at server CONN" + ex);
         }
-
     }
 
     public static void serverRefresh(){
@@ -148,77 +105,15 @@ public class Main extends Application {
             oos.flush();
 
             Message msgs = (Message) ois.readObject();
-            for (int i = 0; i < msgs.getArrBooking().size(); i++) {
-                MenuAdminController.olBooking.add(new Booking(
-                        msgs.getArrBooking().get(i).getBookingID(),
-                        msgs.getArrBooking().get(i).getRoomNo(),
-                        msgs.getArrBooking().get(i).getStaffID(),
-                        msgs.getArrBooking().get(i).getRecurringID(),
-                        msgs.getArrBooking().get(i).getSTime(),
-                        msgs.getArrBooking().get(i).getETime(),
-                        msgs.getArrBooking().get(i).getEstAttend(),
-                        msgs.getArrBooking().get(i).getEventName()));
-            }
-            for (int i = 0; i < msgs.getArrRoom().size(); i++) {
-                MenuAdminController.olRoom.add(new Room(
-                        msgs.getArrRoom().get(i).getRoomNo(),
-                        msgs.getArrRoom().get(i).getCapacity(),
-                        msgs.getArrRoom().get(i).getType(),
-                        msgs.getArrRoom().get(i).getPhoneNo()));
-            }
-            for (int i = 0; i < msgs.getArrStaff().size(); i++) {
-                MenuAdminController.olStaff.add(new Staff(
-                        msgs.getArrStaff().get(i).getStaffID(),
-                        msgs.getArrStaff().get(i).getFirstName(),
-                        msgs.getArrStaff().get(i).getLastName(),
-                        msgs.getArrStaff().get(i).getOffice(),
-                        msgs.getArrStaff().get(i).getEmail(),
-                        msgs.getArrStaff().get(i).getPhoneNo()));
-            }
-            for (int i = 0; i < msgs.getArrUser().size(); i++) {
-                MenuAdminController.olUser.add(new User(
-                        msgs.getArrUser().get(i).getUsername(),
-                        msgs.getArrUser().get(i).getStaffID(),
-                        msgs.getArrUser().get(i).getPassword(),
-                        msgs.getArrUser().get(i).getIsAdmin()));
-            }
+            tableFill(msgs);
+
             MenuAdminController.qwert = "Data Successfully Refreshed";
         }catch (Exception e){
             System.out.println("rr at refresh server");
         }
     }
 
-    public static void serverRemove(String objectRemove, int id){
-        try {
-            oos.writeObject(new Message(objectRemove,id));
-            oos.flush();
-
-            Message msgs = (Message) ois.readObject();
-            System.out.println(msgs.getOps());
-            MenuAdminController.qwert = msgs.getOps();
-
-        }catch (Exception e){
-            System.out.println("eerr at removess::: " + e);
-        }
-
-    }
-
-//    public static void serverAddRoom(Room room){
-//        try {
-//            msg = new Message("addRoom", room);
-//            oos.writeObject(msg);
-//            oos.flush();
-//
-//            Message msgs = (Message) ois.readObject();
-//            System.out.println(msgs.getOps());
-//            MenuAdminController.qwert = msgs.getOps();
-//
-//        }catch (Exception e){
-//            System.out.println("errr at adding rrooom: " + e);
-//        }
-//    }
-
-    public static void serverAdder(Message msg){
+    public static void serverInvoke(Message msg){
         try {
             oos.writeObject(msg);
             oos.flush();
@@ -231,45 +126,40 @@ public class Main extends Application {
         }
     }
 
-//    public static void serverConnCon(Socket socket) {
-//        Thread thread = new Thread() {
-//            @Override
-//            public void run() {
-//                try {
-////                    while (true) {
-////                    }
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//        };
-//        thread.start();
-//    }
-
-    public static void clientInvocation (String header) {
-        //Booking bk = new Booking(1,2,3,"12","a",22,"intellij");
-        try {
-            //System.out.println("aaa");
-            //oos.writeObject(new Message("addBooking",bk));
-            //oos.flush();
-        }catch(Exception e){
-            System.out.println("at client inooov: " + e);
+    public static void tableFill(Message mes){
+        for (int i = 0; i < mes.getArrBooking().size(); i++) {
+            MenuAdminController.olBooking.add(new Booking(
+                    mes.getArrBooking().get(i).getBookingID(),
+                    mes.getArrBooking().get(i).getRoomNo(),
+                    mes.getArrBooking().get(i).getStaffID(),
+                    mes.getArrBooking().get(i).getRecurringID(),
+                    mes.getArrBooking().get(i).getSTime(),
+                    mes.getArrBooking().get(i).getETime(),
+                    mes.getArrBooking().get(i).getEstAttend(),
+                    mes.getArrBooking().get(i).getEventName()));
+        }
+        for (int i = 0; i < mes.getArrRoom().size(); i++) {
+            MenuAdminController.olRoom.add(new Room(
+                    mes.getArrRoom().get(i).getRoomNo(),
+                    mes.getArrRoom().get(i).getCapacity(),
+                    mes.getArrRoom().get(i).getType(),
+                    mes.getArrRoom().get(i).getPhoneNo()));
+        }
+        for (int i = 0; i < mes.getArrStaff().size(); i++) {
+            MenuAdminController.olStaff.add(new Staff(
+                    mes.getArrStaff().get(i).getStaffID(),
+                    mes.getArrStaff().get(i).getFirstName(),
+                    mes.getArrStaff().get(i).getLastName(),
+                    mes.getArrStaff().get(i).getOffice(),
+                    mes.getArrStaff().get(i).getEmail(),
+                    mes.getArrStaff().get(i).getPhoneNo()));
+        }
+        for (int i = 0; i < mes.getArrUser().size(); i++) {
+            MenuAdminController.olUser.add(new User(
+                    mes.getArrUser().get(i).getUsername(),
+                    mes.getArrUser().get(i).getStaffID(),
+                    mes.getArrUser().get(i).getPassword(),
+                    mes.getArrUser().get(i).getIsAdmin()));
         }
     }
-
-//    public static void serverRmUser(Message removeUser) {
-//        try {
-//            oos.writeObject(removeUser);
-//            oos.flush();
-//
-//            Message msgs = (Message) ois.readObject();
-//            System.out.println(msgs.getOps());
-//            MenuAdminController.qwert = msgs.getOps();
-//
-//        }catch (Exception e){
-//            System.out.println("eerr at removess::: " + e);
-//        }
-//
-//    }
-
 }
