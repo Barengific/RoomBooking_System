@@ -21,9 +21,6 @@ public class Booking implements Serializable {
 
     private ArrayList<Booking> bkng;
 
-    public Booking() {
-    }
-
     public Booking(int bookingID) {
         this.bookingID = bookingID;
     }
@@ -42,6 +39,15 @@ public class Booking implements Serializable {
     public Booking(int roomNo, int staffID, int recurringID, String sTime, String eTime, int estAttend, String eventName) {
         this.roomNo = roomNo;
         this.staffID = staffID;
+        this.recurringID = recurringID;
+        this.sTime = sTime;
+        this.eTime = eTime;
+        this.estAttend = estAttend;
+        this.eventName = eventName;
+    }
+
+    public Booking(int roomNo, int recurringID, String sTime, String eTime, int estAttend, String eventName) {
+        this.roomNo = roomNo;
         this.recurringID = recurringID;
         this.sTime = sTime;
         this.eTime = eTime;

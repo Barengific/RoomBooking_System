@@ -11,9 +11,9 @@ public class Message implements Serializable {
 
     private static final long serialVersionUID = 192856L;
 
-
     private int rmID;
     private String ops;
+    private String rmUser;
     User user;
     Room room;
     Staff staff;
@@ -28,6 +28,9 @@ public class Message implements Serializable {
      *
      * @param arrBooking
      */
+    public Message() {
+    }
+
     public Message(ArrayList<Booking> arrBooking) {
         this.arrBooking = arrBooking;
     }
@@ -99,6 +102,11 @@ public class Message implements Serializable {
         this.ops = ops;
     }
 
+    public Message(String ops, String rmUser) {
+        this.ops = ops;
+        this.rmUser = rmUser;
+    }
+
     public Message(String ops, Room room) {
         this.ops = ops;
         this.room = room;
@@ -109,6 +117,7 @@ public class Message implements Serializable {
         this.staff = staff;
     }
 
+
     public int getRmID() {
         return rmID;
     }
@@ -117,12 +126,12 @@ public class Message implements Serializable {
         this.rmID = rmID;
     }
 
-    public Message(String ops, int rmID){
+    public Message(String ops, int rmID) {
         this.ops = ops;
         this.rmID = rmID;
     }
 
-    public Message(String ops,Booking booking) {
+    public Message(String ops, Booking booking) {
         this.ops = ops;
         this.booking = booking;
     }
@@ -183,4 +192,13 @@ public class Message implements Serializable {
     public boolean getIsAdmin() {
         return user.getIsAdmin();
     }
+
+    public String getRmUser() {
+        return rmUser;
+    }
+
+    public void setRmUser(String rmUser) {
+        this.rmUser = rmUser;
+    }
+
 }

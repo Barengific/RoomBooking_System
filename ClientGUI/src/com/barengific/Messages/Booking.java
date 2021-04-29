@@ -36,6 +36,16 @@ public class Booking implements Serializable {
         this.eventName = eventName;
     }
 
+    public Booking(int roomNo, int staffID, int recurringID, String sTime, String eTime, int estAttend, String eventName) {
+        this.roomNo = roomNo;
+        this.staffID = staffID;
+        this.recurringID = recurringID;
+        this.sTime = sTime;
+        this.eTime = eTime;
+        this.estAttend = estAttend;
+        this.eventName = eventName;
+    }
+
     public Booking(int roomNo, int recurringID, String sTime, String eTime, int estAttend, String eventName) {
         this.roomNo = roomNo;
         this.recurringID = recurringID;

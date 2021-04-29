@@ -31,6 +31,7 @@ public class Main extends Application {
     private static ObjectOutputStream oos;
     private static ObjectInputStream ois;
 
+
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../gui/login.fxml"));
@@ -39,13 +40,6 @@ public class Main extends Application {
         stage.setTitle("Hello World");
         stage.setScene(new Scene(root, 300, 275));
         stage.show();
-        LoginController.ress = "msgs.getOps()";
-
-        System.out.println("Starting");
-        String aa = "12345678912345";
-        System.out.println(Long.getLong(aa));
-        System.out.println(Long.valueOf(aa));
-
     }
 
     /**
@@ -68,6 +62,12 @@ public class Main extends Application {
             oos.flush();
             msgs = (Message) ois.readObject();
             System.out.println(msgs.getOps());
+
+            MenuAdminController.usern = uname;
+            MenuAdminController.userp = upass;
+            MenuAdminController.staffi = msgs.getRmID();
+
+
             if (msgs.getOps().equals("confirmed_Super")) {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("../gui/menuAdmin.fxml"));
                 Parent root1 = (Parent) fxmlLoader.load();
@@ -75,7 +75,7 @@ public class Main extends Application {
                 stage.getIcons().add(new Image("file:icon.png"));
                 stage.setScene(new Scene(root1));
                 stage.show();
-
+                MenuAdminController.isa = true;
                 msgs = (Message) ois.readObject();
                 for (int i = 0; i < msgs.getArrBooking().size(); i++) {
                     //System.out.println(msgs.getArrBooking().get(i).getEventName());
@@ -121,7 +121,8 @@ public class Main extends Application {
                 //new Booking(1, 12, 11, 98,"mon","tue",10,"rollball");
                 //MenuAdminController.refreshBooking();
 
-            } else if (msgs.getOps().equals("confirmed_User")) {
+            }
+            else if (msgs.getOps().equals("confirmed_User")) {
                 System.out.println("standard");
 
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("../gui/menu.fxml"));
@@ -130,17 +131,14 @@ public class Main extends Application {
                 stage.getIcons().add(new Image("file:icon.png"));
                 stage.setScene(new Scene(root1));
                 stage.show();
-            } else if (msgs.getOps().equals("NOT_Confirmed")) {
+            }
+            else if (msgs.getOps().equals("NOT_Confirmed")) {
                 System.out.println("not valid");
-
             }
 
-            LoginController.ress = "msgs.getOps()";
         } catch (Exception ex) {
             System.out.println("error at server CONN" + ex);
         }
-
-        //serverConnCon(socket);
 
     }
 
@@ -150,11 +148,6 @@ public class Main extends Application {
             oos.flush();
 
             Message msgs = (Message) ois.readObject();
-//            MenuAdminController.olBooking.clear();
-//            MenuAdminController.olRoom.clear();
-//            MenuAdminController.olStaff.clear();
-//            MenuAdminController.olUser.clear();
-
             for (int i = 0; i < msgs.getArrBooking().size(); i++) {
                 MenuAdminController.olBooking.add(new Booking(
                         msgs.getArrBooking().get(i).getBookingID(),
@@ -189,7 +182,7 @@ public class Main extends Application {
                         msgs.getArrUser().get(i).getPassword(),
                         msgs.getArrUser().get(i).getIsAdmin()));
             }
-
+            MenuAdminController.qwert = "Data Successfully Refreshed";
         }catch (Exception e){
             System.out.println("rr at refresh server");
         }
@@ -210,32 +203,31 @@ public class Main extends Application {
 
     }
 
-    public static void serverAddRoom(Room room){
-        try {
-            msg = new Message("addRoom", room);
-            oos.writeObject(msg);
-            oos.flush();
-
-            Message msgs = (Message) ois.readObject();
-            System.out.println(msgs.getOps());
-            MenuAdminController.qwert = msgs.getOps();
-
-        }catch (Exception e){
-            System.out.println("errr at adding rrooom: " + e);
-        }
-    }
+//    public static void serverAddRoom(Room room){
+//        try {
+//            msg = new Message("addRoom", room);
+//            oos.writeObject(msg);
+//            oos.flush();
+//
+//            Message msgs = (Message) ois.readObject();
+//            System.out.println(msgs.getOps());
+//            MenuAdminController.qwert = msgs.getOps();
+//
+//        }catch (Exception e){
+//            System.out.println("errr at adding rrooom: " + e);
+//        }
+//    }
 
     public static void serverAdder(Message msg){
         try {
             oos.writeObject(msg);
             oos.flush();
-
             Message msgs = (Message) ois.readObject();
             System.out.println(msgs.getOps());
             MenuAdminController.qwert = msgs.getOps();
 
         }catch(Exception e){
-            System.out.println("errroe at eerverADDDEERR " + e);
+            System.out.println("errroe at ADDDEERR " + e);
         }
     }
 
@@ -257,11 +249,27 @@ public class Main extends Application {
     public static void clientInvocation (String header) {
         //Booking bk = new Booking(1,2,3,"12","a",22,"intellij");
         try {
-            System.out.println("aaa");
+            //System.out.println("aaa");
             //oos.writeObject(new Message("addBooking",bk));
             //oos.flush();
         }catch(Exception e){
             System.out.println("at client inooov: " + e);
         }
     }
+
+//    public static void serverRmUser(Message removeUser) {
+//        try {
+//            oos.writeObject(removeUser);
+//            oos.flush();
+//
+//            Message msgs = (Message) ois.readObject();
+//            System.out.println(msgs.getOps());
+//            MenuAdminController.qwert = msgs.getOps();
+//
+//        }catch (Exception e){
+//            System.out.println("eerr at removess::: " + e);
+//        }
+//
+//    }
+
 }

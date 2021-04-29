@@ -8,14 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
-
-import java.sql.Date;
-
-//import java.sql.Date;
-//import java.time.LocalDate;
-//import java.time.format.DateTimeFormatter;
-
+import javafx.scene.text.Text;
 
 public class MenuAdminController {
 
@@ -78,7 +71,7 @@ public class MenuAdminController {
 
     @FXML
     public TextArea taFromServer;
-    public static String qwert = "aaa";
+    public static String qwert = "Click Refresh Button";
 
     @FXML
     private TableView<Booking> tblBooking;
@@ -141,11 +134,28 @@ public class MenuAdminController {
     public static ObservableList<Staff> olStaff = FXCollections.observableArrayList();
 
     public boolean sens = true;
+    public static String usern = "default";
+    public static String userp = "default";
+    public static int staffi = 0;
+    public static boolean isa = false;
+
+    @FXML
+    Text textLoginAs;
+    @FXML
+    Text textStaffIDas;
+    @FXML
+    Text textPrivilege;
 
     public void refreshBooking(ActionEvent event) {
-        if(sens){
+        System.out.println(usern + " " + userp + " " + staffi + " " + isa);
+
+        textLoginAs.setText("Logged in as: " + usern);
+        textStaffIDas.setText("Staff ID: " + staffi);
+        textPrivilege.setText("Admin: " + isa);
+
+        if (sens) {
             sens = false;
-        }else{
+        } else {
             System.out.println("yeeeeh");
             olBooking.clear();
             olRoom.clear();
@@ -157,7 +167,7 @@ public class MenuAdminController {
             tblUser.getItems().clear();
             Main.serverRefresh();
         }
-        taFromServer.setText("From Server");
+        taFromServer.setText(qwert);
         tblBookingid.setCellValueFactory(new PropertyValueFactory<Booking, String>("bookingID"));
         tblBookRoom.setCellValueFactory(new PropertyValueFactory<Booking, String>("roomNo"));
         tblBookStaffid.setCellValueFactory(new PropertyValueFactory<Booking, String>("staffID"));
@@ -188,29 +198,31 @@ public class MenuAdminController {
         tblRoom.getItems().setAll(olRoom);
         tblStaff.getItems().setAll(olStaff);
         //tblBooking.setItems(data);
-            }
+    }
 
     public void addBooking() {
-        //txtAddsHour
-        //txtAddeHour
-//        Main.serverAdder(new Message("addBooking", new Booking(txtAddRoomBooking.getText(),
-//                txtAddRecurring.getText(),txtsTime.getValue(),txteTime.getValue(),txtAtendees.getText(),txtEvent.getText())));
+        String ssDateTime = txtsTime.getValue().toString() + " " + txtAddsHour.getText() + ":00.0";
+        String eeDateTime = txteTime.getValue().toString() + " " + txtAddeHour.getText() + ":00.0";
 
-        //System.out.println("addding -room- ");
-        //taFromServer.setText(qwert);
+        Main.serverAdder(new Message("addBooking", new Booking(Integer.parseInt(txtAddRoomBooking.getText()), staffi,
+                Integer.parseInt(txtAddRecurring.getText()), ssDateTime, eeDateTime,
+                Integer.parseInt(txtAtendees.getText()), txtEvent.getText())));
 
-        //txtAddRoomBooking.clear();
-        //txtAddRecurring.clear();
-        //txtsTime.
-        //txtAtendees.clear();
-        //txtEvent.clear();
+        System.out.println("addding -booking- ");
+        taFromServer.setText(qwert);
 
+        txtAddRoomBooking.clear();
+        txtAddRecurring.clear();
+        txtsTime.getEditor().clear();
+        txteTime.getEditor().clear();
+        txtAtendees.clear();
+        txtEvent.clear();
     }
 
     public void addRoom() {
         //check whether roomno, capacity and phoneno are int before senind to server
-        Main.serverAddRoom(new Room(Integer.valueOf(txtRoomNo.getText()), Integer.valueOf(txtCapacity.getText()),
-                txtType.getText(), Integer.valueOf(txtRoomPhone.getText())));
+        Main.serverAdder(new Message("addRoom", new Room(Integer.parseInt(txtRoomNo.getText()), Integer.parseInt(txtCapacity.getText()),
+                txtType.getText(), Integer.parseInt(txtRoomPhone.getText()))));
 
         System.out.println("addding -room- ");
         taFromServer.setText(qwert);
@@ -223,7 +235,7 @@ public class MenuAdminController {
 
     public void addStaff() {
         Main.serverAdder(new Message("addStaff", new Staff(txtFirstname.getText(), txtLastname.getText(),
-                Integer.valueOf(txtOffice.getText()), txtEmail.getText(), Long.valueOf(txtStaffPhone.getText()))));
+                Integer.parseInt(txtOffice.getText()), txtEmail.getText(), Long.parseLong(txtStaffPhone.getText()))));
 
         System.out.println("adding stafff -- ");
         taFromServer.setText(qwert);
@@ -236,60 +248,55 @@ public class MenuAdminController {
     }
 
     public void addUser() {
-        Main.serverAdder(new Message("addUser", new User(txtAddUsername.getText(), txtAddUserpass.getText(), ckbxIsAdmin.isSelected())));
-
-        System.out.println("adding userssss -- ");
+        //need to find staff idd
+        Main.serverAdder(new Message("addUser", new User(txtAddUsername.getText(), Integer.parseInt(txtAdduserStaff.getText()),
+                txtAddUserpass.getText(), ckbxIsAdmin.isSelected())));
+        //User( username, staffID, password, isAdmin)
+        System.out.println("adding users -- ");
         taFromServer.setText(qwert);
 
         txtAddUsername.clear();
-        txtAddUsername.clear();
+        txtAddUserpass.clear();
+        txtAdduserStaff.clear();
         ckbxIsAdmin.disarm();
     }
 
     public void removeBooking() {
-        //Main.state = "removeBooking";
         //catch exception if booking id is not a integer
-        Main.serverRemove("removeBooking", Integer.valueOf(txtRemoveBooking.getText()));
+        Main.serverRemove("removeBooking", Integer.parseInt(txtRemoveBooking.getText()));
         taFromServer.setText(qwert);
 
         txtRemoveBooking.clear();
     }
 
     public void removeRoom() {
-        Main.serverRemove("removeRoom", Integer.valueOf(txtRemoveRoom.getText()));
+        Main.serverRemove("removeRoom", Integer.parseInt(txtRemoveRoom.getText()));
         taFromServer.setText(qwert);
 
         txtRemoveRoom.clear();
     }
 
     public void removeStaff() {
-        Main.serverRemove("removeStaff", Integer.valueOf(txtRemoveRoom.getText()));
+        Main.serverRemove("removeStaff", Integer.parseInt(txtRemoveStaff.getText()));
         taFromServer.setText(qwert);
 
-        txtRemoveRoom.clear();
+        txtRemoveStaff.clear();
     }
 
     public void removeUser() {
-        //Main.state = "removeUser";
+        Main.serverAdder(new Message("removeUser", txtRemoveUser.getText()));
+        taFromServer.setText(qwert);
 
         txtRemoveUser.clear();
     }
 
     public void resetUser() {
-
-
+        Main.serverAdder(new Message("resetUser", new User(txtAddUsername.getText(),txtAddUserpass.getText())));
+        taFromServer.setText(qwert);
 
         txtAddUsername.clear();
         txtAddUserpass.clear();
 
-        olBooking.clear();
-        olRoom.clear();
-        olStaff.clear();
-        olUser.clear();
-        tblBooking.getItems().clear();
-        tblRoom.getItems().clear();
-        tblStaff.getItems().clear();
-        tblUser.getItems().clear();
     }
 
 }

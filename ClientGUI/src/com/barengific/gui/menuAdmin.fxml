@@ -17,6 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <GridPane alignment="center" hgap="10" prefHeight="667.0" prefWidth="1035.0" vgap="10" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.barengific.gui.MenuAdminController">
    <children>
@@ -38,7 +39,7 @@
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Button>
-            <TextArea fx:id="taFromServer" layoutX="495.0" layoutY="11.0" prefHeight="26.0" prefWidth="398.0" promptText="From Server" wrapText="true" />
+            <TextArea fx:id="taFromServer" layoutX="495.0" layoutY="4.0" prefHeight="45.0" prefWidth="398.0" promptText="From Server" wrapText="true" />
             <TableView fx:id="tblUser" layoutX="642.0" layoutY="54.0" prefHeight="200.0" prefWidth="342.0">
               <columns>
                 <TableColumn fx:id="tblUsername" prefWidth="75.0" text="Username" />
@@ -47,10 +48,6 @@
                   <TableColumn fx:id="tblUserStaffid" prefWidth="75.0" text="Staff ID" />
               </columns>
             </TableView>
-            <TextField fx:id="txtAddUsername" layoutX="641.0" layoutY="260.0" prefHeight="26.0" prefWidth="106.0" promptText="Username" />
-            <TextField fx:id="txtAddUserpass" layoutX="755.0" layoutY="260.0" prefHeight="26.0" prefWidth="122.0" promptText="Password" />
-            <CheckBox fx:id="ckbxIsAdmin" layoutX="766.0" layoutY="298.0" mnemonicParsing="false" text="IsAdmin?" />
-            <Button fx:id="btnAddUser" layoutX="860.0" layoutY="293.0" mnemonicParsing="false" onAction="#addUser" text="Add User" />
             <Button fx:id="btnRemoveUser" layoutX="825.0" layoutY="361.0" mnemonicParsing="false" onAction="#removeUser" text="Remove User" />
             <TextField fx:id="txtRemoveUser" layoutX="668.0" layoutY="361.0" promptText="Remove Username" />
             <TableView fx:id="tblRoom" layoutX="5.0" layoutY="407.0" prefHeight="200.0" prefWidth="342.0">
@@ -70,8 +67,6 @@
                   <TableColumn fx:id="tblStaffPhone" prefWidth="91.2000732421875" text="Phone No#" />
               </columns>
             </TableView>
-            <TextField fx:id="txtAdduserStaff" layoutX="641.0" layoutY="293.0" prefHeight="26.0" prefWidth="106.0" promptText="Staff ID" />
-            <Button fx:id="btnResetUser" layoutX="668.0" layoutY="324.0" mnemonicParsing="false" onAction="#resetUser" text="Reset User Password" />
             <VBox fx:id="vboxStaffDetails" layoutX="478.0" layoutY="435.0" prefHeight="142.0" prefWidth="100.0">
                <children>
                   <TextField fx:id="txtFirstname" prefHeight="26.0" prefWidth="66.0" promptText="First Name" />
@@ -139,18 +134,40 @@
                   <DatePicker fx:id="txtsTime" promptText="Start Date" showWeekNumbers="true" GridPane.rowIndex="1" />
                   <TextField fx:id="txtEvent" promptText="Event Name" GridPane.columnIndex="2" />
                   <TextField fx:id="txtAddRecurring" prefHeight="26.0" prefWidth="66.0" promptText="#of Week Reccuring" GridPane.columnIndex="3" />
-                  <TextField fx:id="txtAddsHour" promptText="Start Time" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="txtAddeHour" promptText="End Time" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtAddsHour" promptText="Start hh:mm" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtAddeHour" promptText="End hh:mm" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <DatePicker fx:id="txteTime" prefHeight="26.0" prefWidth="202.0" promptText="End Date" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                </children>
             </GridPane>
-            <Button fx:id="btnAddBooking" layoutX="439.0" layoutY="326.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="58.0" prefWidth="38.0" text="Add Booking" />
+            <Button fx:id="btnAddBooking" layoutX="433.0" layoutY="326.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="58.0" prefWidth="65.0" text="Add Booking" />
             <VBox layoutX="504.0" layoutY="320.0" prefHeight="58.0" prefWidth="126.0">
                <children>
                   <TextField fx:id="txtRemoveBooking" prefHeight="26.0" prefWidth="117.0" promptText="Remove Booking ID" />
                   <Button fx:id="btnRemoveBooking" mnemonicParsing="false" onAction="#removeBooking" prefHeight="26.0" prefWidth="140.0" text="Remove Booking" />
                </children>
             </VBox>
+            <GridPane layoutX="649.0" layoutY="254.0" prefHeight="70.0" prefWidth="300.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.199951171875" minWidth="10.0" prefWidth="103.199951171875" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="96.800048828125" minWidth="10.0" prefWidth="96.800048828125" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="42.599981689453124" minHeight="10.0" prefHeight="38.2" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="32.200018310546874" minHeight="10.0" prefHeight="31.799999999999997" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TextField fx:id="txtAddUsername" prefHeight="26.0" prefWidth="106.0" promptText="Username" />
+                  <TextField fx:id="txtAddUserpass" prefHeight="26.0" prefWidth="122.0" promptText="Password" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtAdduserStaff" prefHeight="26.0" prefWidth="106.0" promptText="Staff ID" GridPane.columnIndex="2" />
+                  <CheckBox fx:id="ckbxIsAdmin" mnemonicParsing="false" prefHeight="34.0" prefWidth="108.0" text="IsAdmin?" GridPane.rowIndex="1" />
+                  <Button fx:id="btnAddUser" mnemonicParsing="false" onAction="#addUser" prefHeight="44.0" prefWidth="100.0" text="Add User" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Button fx:id="btnResetUser" mnemonicParsing="false" onAction="#resetUser" prefHeight="36.0" prefWidth="107.0" text="Reset Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+            <Text fx:id="textLoginAs" layoutX="154.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Logged in as: " />
+            <Text fx:id="textPrivilege" layoutX="154.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Privilege Level: " />
+            <Text fx:id="textStaffIDas" layoutX="155.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Staff ID: " />
          </children>
       </AnchorPane>
    </children>

@@ -30,6 +30,7 @@ public class LoginController {
         if(!txtUsername.getText().equals("") && !txtPassword.getText().equals("")){
             try {
                 Main.serverConn(txtUsername.getText(), txtPassword.getText());
+
                 res.setText(ress);
                 //((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
             }catch (Exception ex){

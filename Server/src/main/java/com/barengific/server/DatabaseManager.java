@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
@@ -46,53 +47,55 @@ public class DatabaseManager {
         Timestamp ssstime = new Timestamp(System.currentTimeMillis());
         Timestamp eeetime = new Timestamp(System.currentTimeMillis());
         //
-
+//        try {
+//            String findOverlap = "SELECT * FROM BOOKING where roomNo not in ("
+//                    + "SELECT roomNo FROM booking where startdate >= '"
+//                    + eeetime + "' AND findate <= '" + ssstime + "')"
+//                    + "and roomno = " + roomNo;
+//            PreparedStatement ps = conn.prepareStatement(findOverlap);
+//            ResultSet rec = ps.executeQuery();
+//            while (rec.next()) {
+//                if (rec.getInt("RoomNo") == roomNo) {
+//                    if (rec.getTimestamp("DATETIME").equals(ssstime)) {
+//                        newBookingNo = 0;
+//                        System.out.println("Booking already exists for roomno and date");
+//                        break;
+//                    } else {
+//                        System.out.println("contiue");
+//                        continue;
+//                    }
+//                } else {
         try {
-            String findOverlap = "SELECT * FROM BOOKING where roomNo not in ("
-                    + "SELECT roomNo FROM booking where startdate >= '"
-                    + eeetime + "' AND findate <= '" + ssstime + "')"
-                    + "and roomno = " + roomNo;
-            PreparedStatement ps = conn.prepareStatement(findOverlap);
-            ResultSet rec = ps.executeQuery();
 
-            while (rec.next()) {
-                if (rec.getInt("RoomNo") == roomNo) {
-                    if (rec.getTimestamp("DATETIME").equals(ssstime)) {
-                        newBookingNo = 0;
-                        System.out.println("Booking already exists for roomno and date");
-                        break;
-                    } else {
-                        System.out.println("contiue");
-                        continue;
-                    }
-                } else {
-                    try {
-                        Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                        String query = "INSERT INTO BOOKING (BOOKINGID, ROOMNO,STAFFID,RECURRINGID,STARTDATE,ENDDATE,ESTATTENDEES,EVENTNAME) " + "VALUEs (?,?,?,?,?,?,?,?)";
-                        PreparedStatement preparedStatement = conn.prepareStatement(query);
+            java.sql.Timestamp stim = java.sql.Timestamp.valueOf(sTime);
+            java.sql.Timestamp ftim = java.sql.Timestamp.valueOf(fTime);
 
-                        preparedStatement.setInt(1, newBookingNo);
-                        preparedStatement.setInt(2, roomNo);
-                        preparedStatement.setInt(3, staffID);
-                        preparedStatement.setInt(4, recurringID);
-                        preparedStatement.setTimestamp(5, ssstime);
-                        preparedStatement.setTimestamp(6, eeetime);
-                        preparedStatement.setInt(7, estAttend);
-                        preparedStatement.setString(8, eName);
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String query = "INSERT INTO BOOKING (BOOKINGID, ROOMNO,STAFFID,RECURRINGID,STARTDATE,ENDDATE,ESTATTENDEES,EVENTNAME) " + "VALUEs (?,?,?,?,?,?,?,?)";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
 
-                        preparedStatement.executeUpdate();
-                        preparedStatement.close();
-                        stmt.close();
-                        conn.close();
+            preparedStatement.setInt(1, newBookingNo);
+            preparedStatement.setInt(2, roomNo);
+            preparedStatement.setInt(3, staffID);
+            preparedStatement.setInt(4, recurringID);
+            preparedStatement.setTimestamp(5, stim);
+            preparedStatement.setTimestamp(6, ftim);
+            preparedStatement.setInt(7, estAttend);
+            preparedStatement.setString(8, eName);
 
-                    } catch (Exception ex) {
-                        System.out.println("error at adding bookss" + ex);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("error at room booking bd mngr" + e);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            stmt.close();
+            conn.close();
+
+        } catch (Exception ex) {
+            System.out.println("error at adding bookss:: " + ex);
         }
+//                }
+//            }
+//        } catch (Exception e) {
+//            System.out.println("error at room booking bd mngr" + e);
+//        }
 
         return newBookingNo;
     }
@@ -142,15 +145,16 @@ public class DatabaseManager {
         return newStaffID;
     }
 
-    public void addUser(String uname, String uPass, boolean isAdmin) throws SQLException {
+    public void addUser(String uname, int staffID, String uPass, boolean isAdmin) throws SQLException {
         Connection conn = getConnector();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String query = "INSERT INTO USERS (username,password,isadmin) " + "VALUEs (?,?,?)";
+            String query = "INSERT INTO USERS (username,STAFFID,password,isadmin) " + "VALUEs (?,?,?,?)";
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.setString(1, uname);
-            preparedStatement.setString(2, uPass);
-            preparedStatement.setBoolean(3, isAdmin);
+            preparedStatement.setInt(2, staffID);
+            preparedStatement.setString(3, uPass);
+            preparedStatement.setBoolean(4, isAdmin);
             preparedStatement.executeUpdate();
             System.out.println("User! " + uname + " !Added");
             preparedStatement.close();
@@ -176,7 +180,7 @@ public class DatabaseManager {
             System.out.println("failed at remove booking dbmngr class::: " + e);
         }
     }
-    
+
     public void removeRoom(int roomNo) throws SQLException {
         Connection conn = getConnector();
         try {
@@ -192,7 +196,7 @@ public class DatabaseManager {
             System.out.println("failed at remove room dbmngr class" + e);
         }
     }
-    
+
     public void removeStaff(int staffID) throws SQLException {
         Connection conn = getConnector();
         try {
@@ -224,7 +228,7 @@ public class DatabaseManager {
             System.out.println("failed at remove user dbmngr class:: " + e);
         }
     }
-    
+
     ArrayList<Booking> viewBookings() throws SQLException {
         Connection conn = getConnector();
         try {
@@ -242,7 +246,7 @@ public class DatabaseManager {
         }
         return bookings;
     }
-    
+
     ArrayList<Room> viewRooms() throws SQLException {
         Connection conn = getConnector();
         try {
@@ -260,7 +264,7 @@ public class DatabaseManager {
         }
         return rooms;
     }
-    
+
     ArrayList<Staff> viewStaffs() throws SQLException {
         Connection conn = getConnector();
         try {
@@ -278,7 +282,7 @@ public class DatabaseManager {
         }
         return staffs;
     }
-    
+
     ArrayList<User> viewUsers() throws SQLException {
         Connection conn = getConnector();
         try {
@@ -339,10 +343,7 @@ public class DatabaseManager {
             String query = "SELECT USERNAME, isAdmin FROM APP.USERS";
             ResultSet rec = stmt.executeQuery(query);
 
-            System.out.println("about to exe");
-
             while (rec.next()) {
-
                 if (uname.equals(rec.getString("USERNAME"))) {
                     System.out.println(rec.getString("USERNAME"));
                     if (rec.getBoolean("isAdmin")) {
@@ -365,7 +366,23 @@ public class DatabaseManager {
         }
         return userPriv;
     }
-    
+
+    public int getUserStaffID(String uname) throws SQLException {
+        Connection conn = getConnector();
+        int staffi = 0;
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT STAFFID FROM USERS WHERE USERNAME = " + "'" + uname + "'";
+            ResultSet rec = stmt.executeQuery(query);
+            while (rec.next()) {
+                staffi = rec.getInt("STAFFID");
+            }
+        } catch (Exception ex) {
+            System.out.println("error at get user id staff at db manager" + ex);
+        }
+        return staffi;
+    }
+
     void resetUserPass(String rstUname, String resetPass) throws SQLException {
         Connection conn = getConnector();
         try {
@@ -398,5 +415,4 @@ public class DatabaseManager {
 //            System.out.println("err ar view rooms db mngr _ " + e);
 //        }
 //    }
-    
 }

@@ -127,7 +127,7 @@ public class ServerMain {
                         String upass = msg.getPwd();
                         boolean isAdmin = msg.getIsAdmin();
                         System.out.println("creating user");
-                        dbManager.addUser(uname, upass, isAdmin);
+                        //dbManager.addUser(uname, upass, isAdmin);
                         break;
                     case "rmvUser":
                         String rname = msg.getUname();
