@@ -10,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
+import java.util.Scanner;
+
 public class MenuAdminController {
 
     //add booking
@@ -146,9 +148,7 @@ public class MenuAdminController {
     @FXML
     Text textPrivilege;
 
-    public void refreshBooking(ActionEvent event) {
-        System.out.println(usern + " " + userp + " " + staffi + " " + isa);
-
+    public void refreshBooking() {
         textLoginAs.setText("Logged in as: " + usern);
         textStaffIDas.setText("Staff ID: " + staffi);
         textPrivilege.setText("Admin: " + isa);
@@ -156,7 +156,6 @@ public class MenuAdminController {
         if (sens) {
             sens = false;
         } else {
-            System.out.println("yeeeeh");
             olBooking.clear();
             olRoom.clear();
             olStaff.clear();
@@ -217,82 +216,97 @@ public class MenuAdminController {
     //
     public void addBooking() {
         if (txtsTime.getValue() == null || txteTime.getValue() == null) {
-            taFromServer.setText("Bookings Fields Cannot Be Empty");
+            taFromServer.setText("Bookings Dates Cannot Be Empty!");
         } else {
             if (!txtsTime.getValue().equals("") && !txteTime.getValue().equals("")
                     && !txtAddsHour.getText().equals("") && !txtAddeHour.getText().equals("")) {
-
 
                 String ssDateTime = txtsTime.getValue().toString() + " " + txtAddsHour.getText() + ":00.0";
                 String eeDateTime = txteTime.getValue().toString() + " " + txtAddeHour.getText() + ":00.0";
 
                 if (!txtAddRoomBooking.getText().equals("") && !txtAddRecurring.getText().equals("") && !ssDateTime.equals("")
                         && !eeDateTime.equals("") && !txtAtendees.getText().equals("") && !txtEvent.getText().equals("")) {
-                    Main.serverInvoke(new Message("addBooking", new Booking(Integer.parseInt(txtAddRoomBooking.getText()), staffi,
-                            Integer.parseInt(txtAddRecurring.getText()), ssDateTime, eeDateTime,
-                            Integer.parseInt(txtAtendees.getText()), txtEvent.getText())));
-                    taFromServer.setText(outFromServer);
-                    txtAddRoomBooking.clear();
-                    txtAddRecurring.clear();
-                    txtsTime.getEditor().clear();
-                    txteTime.getEditor().clear();
-                    txtAtendees.clear();
-                    txtEvent.clear();
-                    txtAddsHour.clear();
-                    txtAddeHour.clear();
+
+                    if (isInteger(txtAddRoomBooking.getText()) && isInteger(txtAddRecurring.getText()) && isInteger(txtAtendees.getText())) {
+                        Main.serverInvoke(new Message("addBooking", new Booking(Integer.parseInt(txtAddRoomBooking.getText()), staffi,
+                                Integer.parseInt(txtAddRecurring.getText()), ssDateTime, eeDateTime,
+                                Integer.parseInt(txtAtendees.getText()), txtEvent.getText())));
+                        taFromServer.setText(outFromServer);
+                        txtAddRoomBooking.clear();
+                        txtAddRecurring.clear();
+                        txtsTime.getEditor().clear();
+                        txteTime.getEditor().clear();
+                        txtAtendees.clear();
+                        txtEvent.clear();
+                        txtAddsHour.clear();
+                        txtAddeHour.clear();
+                    } else {
+                        taFromServer.setText("Bookings Fields; Room No#, Recurring Weeks \nAnd No# Attendees Must Be An Integer!");
+                    }
                 } else {
-                    taFromServer.setText("Bookings Fields Cannot Be Empty");
+                    taFromServer.setText("Bookings Fields Cannot Be Empty!");
                 }
             } else {
-                taFromServer.setText("Bookings Fields Cannot Be Empty");
+                taFromServer.setText("Bookings Dates Cannot Be Empty!");
             }
         }
     }
 
     public void addRoom() {
-        //check whether roomno, capacity and phoneno are int before senind to server
         if (!txtRoomNo.getText().equals("") && !txtCapacity.getText().equals("") && !txtType.getText().equals("")
                 && !txtRoomPhone.getText().equals("")) {
-            Main.serverInvoke(new Message("addRoom", new Room(Integer.parseInt(txtRoomNo.getText()), Integer.parseInt(txtCapacity.getText()),
-                    txtType.getText(), Integer.parseInt(txtRoomPhone.getText()))));
-            taFromServer.setText(outFromServer);
-            txtRoomNo.clear();
-            txtCapacity.clear();
-            txtType.clear();
-            txtRoomPhone.clear();
+            if (isInteger(txtRoomNo.getText()) && isInteger(txtCapacity.getText()) && isInteger(txtRoomPhone.getText())) {
+                Main.serverInvoke(new Message("addRoom", new Room(Integer.parseInt(txtRoomNo.getText()), Integer.parseInt(txtCapacity.getText()),
+                        txtType.getText(), Integer.parseInt(txtRoomPhone.getText()))));
+                taFromServer.setText(outFromServer);
+                txtRoomNo.clear();
+                txtCapacity.clear();
+                txtType.clear();
+                txtRoomPhone.clear();
+            } else {
+                taFromServer.setText("Room No#, Capacity and Phone No# \nMust Be An Integer!");
+            }
         } else {
-            taFromServer.setText("Room No, Capacity, Type and Phone No \nCannot Be Empty!");
+            taFromServer.setText("Room No#, Capacity, Type and Phone No# \nCannot Be Empty!");
         }
     }
 
     public void addStaff() {
         if (!txtFirstname.getText().equals("") && !txtLastname.getText().equals("") && !txtOffice.getText().equals("")
                 && !txtEmail.getText().equals("") && !txtStaffPhone.getText().equals("")) {
-            Main.serverInvoke(new Message("addStaff", new Staff(txtFirstname.getText(), txtLastname.getText(),
-                    Integer.parseInt(txtOffice.getText()), txtEmail.getText(), Long.parseLong(txtStaffPhone.getText()))));
-            taFromServer.setText(outFromServer);
-            txtFirstname.clear();
-            txtLastname.clear();
-            txtOffice.clear();
-            txtEmail.clear();
-            txtStaffPhone.clear();
+            if (isInteger(txtOffice.getText()) && isInteger(txtStaffPhone.getText())) {
+                Main.serverInvoke(new Message("addStaff", new Staff(txtFirstname.getText(), txtLastname.getText(),
+                        Integer.parseInt(txtOffice.getText()), txtEmail.getText(), Long.parseLong(txtStaffPhone.getText()))));
+                taFromServer.setText(outFromServer);
+                txtFirstname.clear();
+                txtLastname.clear();
+                txtOffice.clear();
+                txtEmail.clear();
+                txtStaffPhone.clear();
+            } else {
+                taFromServer.setText("Staff Office No# And Phone No# Must Be An Integer!");
+            }
         } else {
-            taFromServer.setText("Staff First Name, Last Name, Office No, \nEmail and Phone No Cannot be Empty!");
+            taFromServer.setText("Staff First Name, Last Name, Office No#, \nEmail and Phone No# Cannot Be Empty!");
         }
     }
 
     public void addUser() {
         if (!txtAddUsername.getText().equals("") && !txtAdduserStaff.getText().equals("") && !txtAddUserpass.getText().equals("")) {
-            Main.serverInvoke(new Message("addUser", new User(txtAddUsername.getText(), Integer.parseInt(txtAdduserStaff.getText()),
-                    txtAddUserpass.getText(), ckbxIsAdmin.isSelected())));
-            taFromServer.setText(outFromServer);
+            if (isInteger(txtAdduserStaff.getText())) {
+                Main.serverInvoke(new Message("addUser", new User(txtAddUsername.getText(), Integer.parseInt(txtAdduserStaff.getText()),
+                        txtAddUserpass.getText(), ckbxIsAdmin.isSelected())));
+                taFromServer.setText(outFromServer);
 
-            txtAddUsername.clear();
-            txtAddUserpass.clear();
-            txtAdduserStaff.clear();
-            ckbxIsAdmin.disarm();
+                txtAddUsername.clear();
+                txtAddUserpass.clear();
+                txtAdduserStaff.clear();
+                ckbxIsAdmin.disarm();
+            } else {
+                taFromServer.setText("Staff ID Must Be An Integer!");
+            }
         } else {
-            taFromServer.setText("Username, Password and \nStaff ID Cannot Be Empty!");
+            taFromServer.setText("Username, Password And \nStaff ID Cannot Be Empty!");
         }
     }
 
@@ -300,11 +314,14 @@ public class MenuAdminController {
     //removes
     //
     public void removeBooking() {
-        //catch exception if booking id is not a integer
         if (!txtRemoveBooking.getText().equals("")) {
-            Main.serverInvoke(new Message("removeBooking", Integer.parseInt(txtRemoveBooking.getText())));
-            taFromServer.setText(outFromServer);
-            txtRemoveBooking.clear();
+            if (isInteger(txtRemoveBooking.getText())) {
+                Main.serverInvoke(new Message("removeBooking", Integer.parseInt(txtRemoveBooking.getText())));
+                taFromServer.setText(outFromServer);
+                txtRemoveBooking.clear();
+            } else {
+                taFromServer.setText("Remove Booking ID Must Be An Integer!");
+            }
         } else {
             taFromServer.setText("Remove Booking ID Cannot Be Empty!");
         }
@@ -312,19 +329,27 @@ public class MenuAdminController {
 
     public void removeRoom() {
         if (!txtRemoveRoom.getText().equals("")) {
-            Main.serverInvoke(new Message("removeRoom", Integer.parseInt(txtRemoveRoom.getText())));
-            taFromServer.setText(outFromServer);
-            txtRemoveRoom.clear();
+            if (isInteger(txtRemoveRoom.getText())) {
+                Main.serverInvoke(new Message("removeRoom", Integer.parseInt(txtRemoveRoom.getText())));
+                taFromServer.setText(outFromServer);
+                txtRemoveRoom.clear();
+            } else {
+                taFromServer.setText("Remove Room No# Must Be An Integer!");
+            }
         } else {
-            taFromServer.setText("Remove Room No Cannot Be Empty!");
+            taFromServer.setText("Remove Room No# Cannot Be Empty!");
         }
     }
 
     public void removeStaff() {
         if (!txtRemoveStaff.getText().equals("")) {
-            Main.serverInvoke(new Message("removeStaff", Integer.parseInt(txtRemoveStaff.getText())));
-            taFromServer.setText(outFromServer);
-            txtRemoveStaff.clear();
+            if (isInteger(txtRemoveStaff.getText())) {
+                Main.serverInvoke(new Message("removeStaff", Integer.parseInt(txtRemoveStaff.getText())));
+                taFromServer.setText(outFromServer);
+                txtRemoveStaff.clear();
+            } else {
+                taFromServer.setText("Remove Staff ID Must Be An Integer!");
+            }
         } else {
             taFromServer.setText("Remove Staff ID Cannot Be Empty!");
         }
@@ -334,11 +359,34 @@ public class MenuAdminController {
         if (!txtRemoveUser.getText().equals("")) {
             Main.serverInvoke(new Message("removeUser", txtRemoveUser.getText()));
             taFromServer.setText(outFromServer);
-
             txtRemoveUser.clear();
         } else {
             taFromServer.setText("Remove Username Cannot Be Empty!");
         }
+    }
+
+    public static boolean isInteger(String str) {
+        if (str == null) {
+            return false;
+        }
+        int length = str.length();
+        if (length == 0) {
+            return false;
+        }
+        int i = 0;
+        if (str.charAt(0) == '-') {
+            if (length == 1) {
+                return false;
+            }
+            i = 1;
+        }
+        for (; i < length; i++) {
+            char c = str.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.barengific.server;
 
 import com.barengific.Messages.*;
+import static com.barengific.server.ServerMain.clientInvoker;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
+import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
 
 /**
  *
@@ -82,9 +84,14 @@ public class DatabaseManager {
             preparedStatement.close();
             stmt.close();
             conn.close();
-
+            //ServerMain.dbInfo = "Booking Number: " + newBookingNo + "\nRetain For Reference: ";
+            clientInvoker(new Message(""));
+        } catch (DerbySQLIntegrityConstraintViolationException ex) {
+            System.out.println("no such room no");
+            ServerMain.dbInfo = "Error Adding Booking, Check Submitted Details: \nNo Such Room No#";
         } catch (Exception ex) {
             System.out.println("error at adding bookss:: " + ex);
+            ServerMain.dbInfo = "Error Adding Booking \nCheck Submitted Details";
         }
 //                }
 //            }
@@ -262,7 +269,7 @@ public class DatabaseManager {
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             ResultSet rec = preparedStatement.executeQuery();
             while (rec.next()) {
-                staffs.add(new Staff(rec.getInt(1), rec.getString(2), rec.getString(3), 
+                staffs.add(new Staff(rec.getInt(1), rec.getString(2), rec.getString(3),
                         rec.getInt(4), rec.getString(5), rec.getInt(6)));
             }
         } catch (Exception e) {

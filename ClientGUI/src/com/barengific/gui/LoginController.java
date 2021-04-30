@@ -26,12 +26,22 @@ public class LoginController {
     @FXML
     Button btnLogs;
 
-    public void onLogin(ActionEvent event){
+
+    private MenuAdminController aaa;
+
+    public void MenuAdminController(MenuAdminController aaa) {
+        this.aaa = aaa;
+    }
+
+    public void onLogin(){
         if(!txtUsername.getText().equals("") && !txtPassword.getText().equals("")){
             try {
                 Main.serverConn(txtUsername.getText(), txtPassword.getText());
-
                 res.setText(ress);
+                if(!ress.equals( "Login Details Not Valid")){
+                    Stage stage = (Stage) btnLogs.getScene().getWindow();
+                    stage.close();
+                }
             }catch (Exception ex){
                 System.out.println(ex);
             }

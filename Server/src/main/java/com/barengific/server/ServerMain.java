@@ -30,6 +30,8 @@ public class ServerMain {
     static User user;
     static Booking bkng;
 
+    public static String dbInfo = "Server Initialising";
+
     public static void main(String[] args) throws SQLException, IOException {
         serverSocket = new ServerSocket(1234);
         System.out.println("Server Started at: " + new Date() + '\n');
@@ -93,8 +95,6 @@ public class ServerMain {
 
     static void userOptions() {
         try {//using switch case to handle client requests
-            //System.out.println("receiving options ");
-
             msg = new Message(dbManager.viewBookings(), dbManager.viewRooms(),
                     dbManager.viewStaffs(), dbManager.viewUsers());
             oos.writeObject(msg);
@@ -171,19 +171,19 @@ public class ServerMain {
                     //
                     //
                     case "addBooking":
-                        int bookingID = dbManager.addBooking(msg.getBooking().getRoomNo(),
+                        dbManager.addBooking(msg.getBooking().getRoomNo(),
                                 msg.getBooking().getStaffID(), msg.getBooking().getRecurringID(),
                                 msg.getBooking().getSTime(), msg.getBooking().getETime(),
                                 msg.getBooking().getEstAttend(), msg.getBooking().getEventName());
-                        oos.reset();
-                        oos.writeObject(new Message("Booking number retain for reference: " + bookingID));
-                        oos.flush();
+//                        oos.reset();
+//                        oos.writeObject(new Message(dbInfo));
+//                        oos.flush();
                         break;
                     case "addRoom":
                         dbManager.addRoom(msg.getRoom().getRoomNo(), msg.getRoom().getCapacity(),
                                 msg.getRoom().getType(), msg.getRoom().getPhoneNo());
                         oos.reset();
-                        oos.writeObject(new Message("Room Number: " + msg.getRoom().getRoomNo() + " Was Added"));
+                        oos.writeObject(new Message(dbInfo));
                         oos.flush();
                         System.out.println("room addsss");
                         break;
@@ -213,6 +213,17 @@ public class ServerMain {
             System.out.println("error - at start thread" + e);
             //oos.writeObject(new M);
         }
+    }
+
+    public static void clientInvoker(Message msg) {
+        try {
+            oos.reset();
+            oos.writeObject(msg);
+            oos.flush();
+        } catch (Exception e) {
+            System.out.println("error at client invoker: " + e);
+        }
+
     }
 //
 //    static public void verifyUsers(String uname, String upass) throws SQLException {//using boolean if user verified or not
