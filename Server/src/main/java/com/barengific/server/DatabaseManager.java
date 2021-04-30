@@ -2,6 +2,7 @@ package com.barengific.server;
 
 import com.barengific.Messages.*;
 import static com.barengific.server.ServerMain.clientInvoker;
+import static com.barengific.server.ServerMain.msg;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -40,7 +41,8 @@ public class DatabaseManager {
         return con;
     }
 
-    public int addBooking(int roomNo, int staffID, int recurringID, String sTime, String fTime, int estAttend, String eName) throws SQLException {
+    public int addBooking(int roomNo, int staffID, int recurringID, String sTime,
+            String fTime, int estAttend, String eName) throws SQLException {
         Connection conn = getConnector();
         int newBookingNo = viewBookings().size() + 1;
         //
@@ -84,25 +86,24 @@ public class DatabaseManager {
             preparedStatement.close();
             stmt.close();
             conn.close();
-            //ServerMain.dbInfo = "Booking Number: " + newBookingNo + "\nRetain For Reference: ";
-            clientInvoker(new Message(""));
+            clientInvoker(new Message("Booking Number: " + newBookingNo + "\nRetain For Reference: "));
         } catch (DerbySQLIntegrityConstraintViolationException ex) {
             System.out.println("no such room no");
-            ServerMain.dbInfo = "Error Adding Booking, Check Submitted Details: \nNo Such Room No#";
+            clientInvoker(new Message("Error Adding Booking, Check Submitted Details: \nNo Such Room No#"));
         } catch (Exception ex) {
             System.out.println("error at adding bookss:: " + ex);
-            ServerMain.dbInfo = "Error Adding Booking \nCheck Submitted Details";
+            clientInvoker(new Message("Error Adding BOOKING \nCheck Submitted Details"));
         }
 //                }
 //            }
 //        } catch (Exception e) {
 //            System.out.println("error at room booking bd mngr" + e);
 //        }
-
         return newBookingNo;
     }
 
-    public void addRoom(int roomNo, int capacity, String type, long phoneNo) throws SQLException {
+    public void addRoom(int roomNo, int capacity, String type, long phoneNo)
+            throws SQLException {
         Connection conn = getConnector();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -117,12 +118,15 @@ public class DatabaseManager {
             preparedStatement.close();
             stmt.close();
             conn.close();
+            clientInvoker(new Message("New Room was Added"));
         } catch (Exception e) {
             System.out.println("add rooom error here: " + e);
+            clientInvoker(new Message("Error Adding ROOM \nCheck Submitted Details"));
         }
     }
 
-    public int addStaff(String firstName, String lastName, int officeNo, String email, long phoneNo) throws SQLException {
+    public int addStaff(String firstName, String lastName, int officeNo,
+            String email, long phoneNo) throws SQLException {
         Connection conn = getConnector();
         int newStaffID = viewStaffs().size() + 1;
 
@@ -141,8 +145,10 @@ public class DatabaseManager {
             preparedStatement.close();
             stmt.close();
             conn.close();
+            clientInvoker(new Message("New Staff Was Added \nWith Staff ID: " + newStaffID));
         } catch (Exception e) {
             System.out.println("add staff error here: " + e);
+            clientInvoker(new Message("Error Adding STAFF \nCheck Submitted Details"));
         }
         return newStaffID;
     }
@@ -162,8 +168,10 @@ public class DatabaseManager {
             preparedStatement.close();
             stmt.close();
             conn.close();
+            clientInvoker(new Message("New User: " + uname + " Was Added"));
         } catch (Exception e) {
             System.out.println("add user error here: " + e);
+            clientInvoker(new Message("Error Adding USER \nCheck Submitted Details"));
         }
     }
 
@@ -174,12 +182,14 @@ public class DatabaseManager {
             String query = "DELETE FROM BOOKING WHERE BOOKINGID = " + bookingID;
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.executeUpdate();
-            System.out.println("booking! " + bookingID + " !Deleted");
             preparedStatement.close();
             stmt.close();
             conn.close();
+            System.out.println("booking! " + bookingID + " !Deleted");
+            clientInvoker(new Message("Booking ID: " + bookingID + " Removed"));
         } catch (Exception e) {
             System.out.println("failed at remove booking dbmngr class::: " + e);
+            clientInvoker(new Message("Error: No Valid Booking ID \nCheck Submission"));
         }
     }
 
@@ -190,12 +200,14 @@ public class DatabaseManager {
             String query = "DELETE FROM ROOM WHERE ROOMNO = " + roomNo;
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.executeUpdate();
-            System.out.println("room! " + roomNo + " !Deleted");
             preparedStatement.close();
             stmt.close();
             conn.close();
+            System.out.println("room! " + roomNo + " !Deleted");
+            clientInvoker(new Message("Room No#: " + roomNo + " Removed"));
         } catch (Exception e) {
             System.out.println("failed at remove room dbmngr class" + e);
+            clientInvoker(new Message("Error: No Valid Room No# \nCheck Submission"));
         }
     }
 
@@ -206,12 +218,14 @@ public class DatabaseManager {
             String query = "DELETE FROM STAFF WHERE STAFFID = " + staffID;
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.executeUpdate();
-            System.out.println("staff! " + staffID + " !Deleted");
             preparedStatement.close();
             stmt.close();
             conn.close();
+            System.out.println("staff! " + staffID + " !Deleted");
+            clientInvoker(new Message("Staff ID: " + staffID + " Removed"));
         } catch (Exception e) {
             System.out.println("failed at remove staff dbmngr class:: " + e);
+            clientInvoker(new Message("Error: No Valid Staff ID \nCheck Submission"));
         }
     }
 
@@ -222,12 +236,14 @@ public class DatabaseManager {
             String query = "DELETE FROM USERS WHERE USERNAME = " + "'" + uname + "'";
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.executeUpdate();
-            System.out.println("User! " + uname + " !Deleted");
             preparedStatement.close();
             stmt.close();
             conn.close();
+            System.out.println("User! " + uname + " !Deleted");
+            clientInvoker(new Message("Username: " + uname + " Removed"));
         } catch (Exception e) {
             System.out.println("failed at remove user dbmngr class:: " + e);
+            clientInvoker(new Message("Error: No Valid Username \nCheck Submission"));
         }
     }
 
@@ -381,12 +397,14 @@ public class DatabaseManager {
             String query = "UPDATE USERS SET PASSWORD = '" + resetPass + "' WHERE USERNAME = '" + rstUname + "'";
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.executeUpdate();
-            System.out.println("User! " + rstUname + " !pass reset updated");
             preparedStatement.close();
             stmt.close();
             conn.close();
+            System.out.println("User! " + rstUname + " !pass reset updated");
+            clientInvoker(new Message("User: " + rstUname + "\nPassword Has Been Reset"));
         } catch (Exception e) {
             System.out.println("er at dbManager reset user");
+            clientInvoker(new Message("Username: " + rstUname + " Non-Existence"));
         }
     }
 }

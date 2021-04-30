@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -88,19 +89,20 @@
             </VBox>
             <MenuBar layoutY="1.0">
               <menus>
-                <Menu mnemonicParsing="false" text="File">
+                <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
+                    <MenuItem fx:id="miClose" mnemonicParsing="false" text="Close" />
+                        <MenuItem fx:id="miLogoff" mnemonicParsing="false" text="Log Off" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
+                <Menu fx:id="menuEdit" mnemonicParsing="false" text="Edit">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Refresh" />
+                    <MenuItem fx:id="miRefresh" mnemonicParsing="false" onAction="#refreshBooking" text="Refresh" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Help">
+                <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
+                    <MenuItem fx:id="miAbout" mnemonicParsing="false" text="About" />
                   </items>
                 </Menu>
               </menus>
@@ -168,6 +170,7 @@
             <Text fx:id="textLoginAs" layoutX="154.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Logged in as: " />
             <Text fx:id="textPrivilege" layoutX="154.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Privilege Level: " />
             <Text fx:id="textStaffIDas" layoutX="155.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Staff ID: " />
+            <Label fx:id="labelVersion" layoutX="954.0" layoutY="5.0" text="Version: 1.0" />
          </children>
       </AnchorPane>
    </children>
