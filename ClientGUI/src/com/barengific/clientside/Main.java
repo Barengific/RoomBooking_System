@@ -66,8 +66,9 @@ public class Main extends Application {
             MenuAdminController.usern = uname;
             MenuAdminController.userp = upass;
             MenuAdminController.staffi = msgs.getRmID();
-            
+
             if (msgs.getOps().equals("confirmed_Super")) {
+                LoginController.ress = "Valid Logging In";
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("../gui/menuAdmin.fxml"));
                 Parent root1 = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
@@ -76,22 +77,20 @@ public class Main extends Application {
                 stage.show();
                 MenuAdminController.isa = true;
                 msgs = (Message) ois.readObject();
-
                 tableFill(msgs);
-
             }
             else if (msgs.getOps().equals("confirmed_User")) {
-                System.out.println("standard");
-
+                LoginController.ress = "Valid Logging In";
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("../gui/menu.fxml"));
                 Parent root1 = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
                 stage.getIcons().add(new Image("file:icon.png"));
                 stage.setScene(new Scene(root1));
                 stage.show();
+                tableFill(msgs);
             }
             else if (msgs.getOps().equals("NOT_Confirmed")) {
-                System.out.println("not valid");
+                LoginController.ress = "Login Details Not Valid";
             }
 
         } catch (Exception ex) {
@@ -107,7 +106,7 @@ public class Main extends Application {
             Message msgs = (Message) ois.readObject();
             tableFill(msgs);
 
-            MenuAdminController.qwert = "Data Successfully Refreshed";
+            MenuAdminController.outFromServer = "Data Successfully Refreshed";
         }catch (Exception e){
             System.out.println("rr at refresh server");
         }
@@ -119,7 +118,7 @@ public class Main extends Application {
             oos.flush();
             Message msgs = (Message) ois.readObject();
             System.out.println(msgs.getOps());
-            MenuAdminController.qwert = msgs.getOps();
+            MenuAdminController.outFromServer = msgs.getOps();
 
         }catch(Exception e){
             System.out.println("errroe at ADDDEERR " + e);

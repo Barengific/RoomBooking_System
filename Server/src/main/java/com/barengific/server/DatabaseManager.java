@@ -40,12 +40,7 @@ public class DatabaseManager {
 
     public int addBooking(int roomNo, int staffID, int recurringID, String sTime, String fTime, int estAttend, String eName) throws SQLException {
         Connection conn = getConnector();
-
         int newBookingNo = viewBookings().size() + 1;
-
-        //temp
-        Timestamp ssstime = new Timestamp(System.currentTimeMillis());
-        Timestamp eeetime = new Timestamp(System.currentTimeMillis());
         //
 //        try {
 //            String findOverlap = "SELECT * FROM BOOKING where roomNo not in ("
@@ -236,10 +231,8 @@ public class DatabaseManager {
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             ResultSet rec = preparedStatement.executeQuery();
             while (rec.next()) {
-                bookings.add(new Booking(rec.getInt(1), rec.getInt(2), rec.getInt(3), rec.getInt(4), rec.getString(5), rec.getString(6), rec.getInt(7), rec.getString(8)));
-//                for (Booking clntBooking : bookings) {
-//                    //System.out.println(clntBooking.getBookingID() + "-");
-//                }
+                bookings.add(new Booking(rec.getInt(1), rec.getInt(2), rec.getInt(3),
+                        rec.getInt(4), rec.getString(5), rec.getString(6), rec.getInt(7), rec.getString(8)));
             }
         } catch (Exception e) {
             System.out.println("err ar view bookings db mngr _ " + e);
@@ -255,9 +248,6 @@ public class DatabaseManager {
             ResultSet rec = preparedStatement.executeQuery();
             while (rec.next()) {
                 rooms.add(new Room(rec.getInt(1), rec.getInt(2), rec.getString(3), rec.getInt(4)));
-//                for (Booking clntBooking : bookings) {
-//                    //System.out.println(clntBooking.getBookingID() + "-");
-//                }
             }
         } catch (Exception e) {
             System.out.println("err ar view rooms db mngr _ " + e);
@@ -272,10 +262,8 @@ public class DatabaseManager {
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             ResultSet rec = preparedStatement.executeQuery();
             while (rec.next()) {
-                staffs.add(new Staff(rec.getInt(1), rec.getString(2), rec.getString(3), rec.getInt(4), rec.getString(5), rec.getInt(6)));
-//                for (Booking clntBooking : bookings) {
-//                    //System.out.println(clntBooking.getBookingID() + "-");
-//                }
+                staffs.add(new Staff(rec.getInt(1), rec.getString(2), rec.getString(3), 
+                        rec.getInt(4), rec.getString(5), rec.getInt(6)));
             }
         } catch (Exception e) {
             System.out.println("err ar view staffs db mngr _ " + e);
@@ -291,10 +279,6 @@ public class DatabaseManager {
             ResultSet rec = preparedStatement.executeQuery();
             while (rec.next()) {
                 users.add(new User(rec.getString(1), rec.getInt(2), rec.getString(3), rec.getBoolean(4)));
-                for (User clntUsers : users) {
-                    //System.out.println(clntUsers.getStaffID()+ "-");
-                    //System.out.println("aaa--" + rec.getInt(2));
-                }
             }
         } catch (Exception e) {
             System.out.println("!!! NNOOOO ...,<>");
@@ -378,7 +362,7 @@ public class DatabaseManager {
                 staffi = rec.getInt("STAFFID");
             }
         } catch (Exception ex) {
-            System.out.println("error at get user id staff at db manager" + ex);
+            System.out.println("error at get staff id staff at db manager" + ex);
         }
         return staffi;
     }
@@ -398,21 +382,4 @@ public class DatabaseManager {
             System.out.println("er at dbManager reset user");
         }
     }
-
-//    void viewRooms() throws SQLException {
-//        Connection conn = getConnector();
-//        try {
-//            String query = "SELECT * FROM ROOM ORDER BY ROOMNO ASC";
-//            PreparedStatement preparedStatement = conn.prepareStatement(query);
-//            ResultSet rec = preparedStatement.executeQuery();
-//            while (rec.next()) {
-//                rooms.add(new Room(rec.getInt(1), rec.getInt(2), rec.getString(3), rec.getInt(4)));
-//                for (Room clntRoom : rooms) {
-//                    System.out.println(clntRoom.getRoomNo() + "-" + clntRoom.getCapacity() + "-" + clntRoom.getType());
-//                }
-//            }
-//        } catch (Exception e) {
-//            System.out.println("err ar view rooms db mngr _ " + e);
-//        }
-//    }
 }

@@ -3,6 +3,7 @@ package com.barengific.server;
 import com.barengific.Messages.Booking;
 import com.barengific.Messages.Message;
 import com.barengific.Messages.User;
+import static com.barengific.server.ServerMain.user;
 import java.io.*;
 import java.net.*;
 import java.sql.*;
@@ -15,11 +16,10 @@ import java.util.Date;
 public class ServerMain {
 
     public static int clientNo = 1;
-    public static ServerSocket srvrSckt;
-    public static Socket clntSckt;
-    public static final int prt = 1234;
+    public static ServerSocket serverSocket;
+    public static final int port = 1234;
 
-    public static boolean usrVld;
+    public static boolean userValid;
     public static boolean userPriv;
 
     static ObjectInputStream ois;
@@ -31,162 +31,179 @@ public class ServerMain {
     static Booking bkng;
 
     public static void main(String[] args) throws SQLException, IOException {
-        srvrSckt = new ServerSocket(1234);
-        System.out.println("Srvr Strtd @ " + new Date() + '\n');
+        serverSocket = new ServerSocket(1234);
+        System.out.println("Server Started at: " + new Date() + '\n');
+
         while (true) {
-            Socket clntSckt = srvrSckt.accept();
-            Thread thrd = new Thread() {
+            Socket clientSocket = serverSocket.accept();
+            Thread thread = new Thread() {
                 @Override
                 public void run() {
-                    try {//start main jobs of thread - create new instances of class
-                        System.out.println("Clnt Cnnctd \nStrt Thrd " + clientNo++ + '\n');
-                        dbManager = new DatabaseManager("admin12345", "pass", "jdbc:derby://localhost:1527/ppRoom");
-                        ois = new ObjectInputStream(clntSckt.getInputStream());
-                        oos = new ObjectOutputStream(clntSckt.getOutputStream());
-                        clntConn(clntSckt);
+                    try {
+                        System.out.println("\nClient Connected \nStart Thread " + clientNo++ + '\n');
+                        dbManager = new DatabaseManager("app", "pass", "jdbc:derby://localhost:1527/roombooks");
+                        ois = new ObjectInputStream(clientSocket.getInputStream());
+                        oos = new ObjectOutputStream(clientSocket.getOutputStream());
+                        clientConn(clientSocket);
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
-
-                private void clntConn(Socket clntSckt) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
             };
-            thrd.start();
+            thread.start();
         }
     }
+
     //run for every new client
-    public static void clntConn(Socket clntSckt) throws IOException, ClassNotFoundException, SQLException {
+    public static void clientConn(Socket clntSckt) throws IOException, ClassNotFoundException, SQLException {
         msg = new Message("   _   _   _   _   _  \n"
                 + "  / \\ / \\ / \\ / \\ / \\ \n"
                 + " ( L | o | g | i | n )\n"
                 + "  \\_/ \\_/ \\_/ \\_/ \\_/ \n"
-                + "Type Username: "+ "Type Password: ");
-        oos.writeObject(msg);//send abve to client as soon as client connects
+                + "Type Username: " + "Type Password: ");
+        oos.writeObject(msg);
         oos.flush();
-        
+
         user = (User) ois.readObject();
-        
-        System.out.println("reading");
-        System.out.println(user.getUsername());
-        System.out.println(user.getPassword());
-        Vuser(user.getUsername(), user.getPassword());
-        if (usrVld == true) {//verifying user
-            isAdmin(user.getUsername());
-            if (userPriv == true) {//checking for user priveledges
-                msg = new Message("confirmed_Super\n");
-                oos.writeObject(msg);
-                oos.flush();//send menu to clients
-                msg = new Message("1) Book Room\n"
-                        + "2) View Bookings\n"
-                        + "3) View Available Rooms\n"
-                        + "4) Update Booking\n"
-                        + "5) Delete Booking\n"
-                        + "6) User Settings\n"
-                        + "7) Quit", new User(user.getUsername(), user.getStaffID(), user.getPassword(), true));
+        userValid = dbManager.verifyUser(user.getUsername(), user.getPassword());
+        userPriv = dbManager.validateUser(user.getUsername());
+        //verifyUsers(user.getUsername(), user.getPassword());
+        //isAdmin(user.getUsername());
+        if (userValid == true) {
+            if (userPriv == true) {//checking for user priveledges            
+                msg = new Message("confirmed_Super", dbManager.getUserStaffID(user.getUsername()));
                 oos.writeObject(msg);
                 oos.flush();
                 userOptions();
-                //System.out.println("" + msg.getOps());
             } else {
-                msg = new Message("confirmed_User\n");
-                oos.writeObject(msg);
-                oos.flush();
-                msg = new Message("1) Book Room\n"
-                        + "2) View Bookings\n"
-                        + "3) View Available Rooms\n"
-                        + "4) Update Booking\n"
-                        + "5) Delete Booking\n"
-                        + "7) Quit", new User(user.getUsername(), user.getStaffID(), user.getPassword(), false));
+                msg = new Message("confirmed_User", dbManager.getUserStaffID(user.getUsername()));
                 oos.writeObject(msg);
                 oos.flush();
                 userOptions();
-                //System.out.println("" + msg.getOps());
             }
-        } else if (usrVld == false) {
-            msg = new Message("NOT_Confirmed");
+        } else if (userValid == false) {
+            msg = new Message("NOT_Confirmed", dbManager.getUserStaffID(user.getUsername()));
             oos.writeObject(msg);
             oos.flush();
-
-            clntConn(clntSckt);
+            clientConn(clntSckt);
             System.out.println("sent---notcomfum");
         }
     }
 
     static void userOptions() {
         try {//using switch case to handle client requests
-            System.out.println("receiving options ");
+            //System.out.println("receiving options ");
+
+            msg = new Message(dbManager.viewBookings(), dbManager.viewRooms(),
+                    dbManager.viewStaffs(), dbManager.viewUsers());
+            oos.writeObject(msg);
+            oos.flush();
+
             while (true) {//server continues to server client with their options selected e.g. creating user, removing user,
-                System.out.println("heree");
+
                 msg = (Message) ois.readObject();
-                System.out.println(msg.getOps() + "-salv-");
+                System.out.println("\n" + msg.getOps() + "-salv-\n");
                 switch (msg.getOps()) {
-                    case "crtUser":
-                        String uname = msg.getUname();
-                        String upass = msg.getPwd();
-                        boolean isAdmin = msg.getIsAdmin();
-                        System.out.println("creating user");
-                        //dbManager.addUser(uname, upass, isAdmin);
-                        break;
-                    case "rmvUser":
-                        String rname = msg.getUname();
-                        dbManager.removeUser(rname);
-                        System.out.println(rname + " removed");
-                        break;
-                    case "rstUser"://reset user password
-                        String rstName = msg.getUname();
-                        String rstPass = msg.getPwd();
-                        System.out.println("rsting pass");
-                        dbManager.resetUserPass(rstName, rstPass);
-                        break;
-                    case "Booking":
-                        //msg = (Message) ois.readObject();
-                        //System.out.println("" + msg.getEventName());
-                        //int bookingid = dbManager.addBooking(msg.getRoomNo(), msg.getStaffID(), msg.getRecurringID(), msg.getStartTime(), msg.getFinTime(), msg.getEstAttend(), msg.getEventName());
-                        //read booking info and ad to database
-                        System.out.println("Room-booking one");
-                        //bkng = new Booking(bookingid);
-                        //msg = new Message("Below is your BookingID / number ---- Please retain this for future reference: \n", bkng);
-                        oos.writeObject(msg);
-                        oos.writeObject(bkng);
+                    case "refresh":
+                        System.out.println("refreshing");
+                        Message msge = new Message(dbManager.viewBookings(), dbManager.viewRooms(),
+                                dbManager.viewStaffs(), dbManager.viewUsers());
+                        msge.getArrBooking().clear();
+                        msge.getArrRoom().clear();
+                        msge.getArrStaff().clear();
+                        msge.getArrUser().clear();
+                        msge = new Message(dbManager.viewBookings(), dbManager.viewRooms(),
+                                dbManager.viewStaffs(), dbManager.viewUsers());
+                        oos.reset();
+                        oos.writeObject(msge);
                         oos.flush();
                         break;
-                    case "view_Booking":
-                        System.out.println("viewing Booking");
-                        dbManager.viewBookings();
-                        bkng = new Booking(dbManager.bookings);
-                        //msg = new Message("View_Booking", dbManager.bookings);
-                        try {
-                            oos.writeObject(bkng);
-                            oos.flush();
-                        } catch (IOException ex) {
-                            System.out.println("" + ex);
-                        }
-                        System.out.println("View booking simple");
-                        break;
-                    case "vAvail":
-                        System.out.println("view available rooms");
-                        break;
-                    case "view_Booking_Details":
-                        System.out.println("view available booking");
+                    case "resetUser"://reset user password
+                        System.out.println("rsting pass");
+                        dbManager.resetUserPass(msg.getUser().getUsername(), msg.getUser().getPassword());
+                        msg = new Message("User: " + msg.getUser().getUsername() + "\nPassword Was Reset");
+                        oos.reset();
+                        oos.writeObject(msg);
+                        oos.flush();
                         break;
                     case "updateBook":
-                        System.out.println("");
+                        System.out.println("updating not implexmenteed yet");
                         break;
-                    case "delBook":
+                    // 
+                    //
+                    //
+                    case "removeBooking":
+                        System.out.println("FDe delling booking");
+                        dbManager.removeBooking(msg.getRmID());
                         System.out.println("Deleting Booking");
+                        msg = new Message("Booking IDss: " + msg.getRmID() + " removed");
+                        oos.reset();
+                        oos.writeObject(msg);
+                        oos.flush();
                         break;
-                    case "viewRooms":
-                        System.out.println("viewing Rooms");
-                        dbManager.viewRooms();
-                        try {
-                            oos.writeObject(dbManager.rooms);
-                            oos.flush();
-                        } catch (IOException ex) {
-                            System.out.println("" + ex);
-                        }
+                    case "removeRoom":
+                        dbManager.removeRoom(msg.getRmID());
+                        System.out.println("Deleting Roomms");
+                        msg = new Message("Room Number: " + msg.getRmID() + " Was Removed");
+                        oos.reset();
+                        oos.writeObject(msg);
+                        oos.flush();
+                        System.out.println("Deleting Room");
                         break;
+                    case "removeStaff":
+                        dbManager.removeStaff(msg.getRmID());
+                        System.out.println("Deleting stafffss");
+                        msg = new Message("Staff ID: " + msg.getRmID() + " Was Removed");
+                        oos.reset();
+                        oos.writeObject(msg);
+                        oos.flush();
+                        System.out.println("Deleting Staff");
+                        break;
+                    case "removeUser":
+                        dbManager.removeUser(msg.getRmUser());
+                        msg = new Message("User: " + msg.getRmUser() + " Was removed");
+                        oos.reset();
+                        oos.writeObject(msg);
+                        oos.flush();
+                        break;
+                    //                      
+                    //
+                    //
+                    case "addBooking":
+                        int bookingID = dbManager.addBooking(msg.getBooking().getRoomNo(),
+                                msg.getBooking().getStaffID(), msg.getBooking().getRecurringID(),
+                                msg.getBooking().getSTime(), msg.getBooking().getETime(),
+                                msg.getBooking().getEstAttend(), msg.getBooking().getEventName());
+                        oos.reset();
+                        oos.writeObject(new Message("Booking number retain for reference: " + bookingID));
+                        oos.flush();
+                        break;
+                    case "addRoom":
+                        dbManager.addRoom(msg.getRoom().getRoomNo(), msg.getRoom().getCapacity(),
+                                msg.getRoom().getType(), msg.getRoom().getPhoneNo());
+                        oos.reset();
+                        oos.writeObject(new Message("Room Number: " + msg.getRoom().getRoomNo() + " Was Added"));
+                        oos.flush();
+                        System.out.println("room addsss");
+                        break;
+                    case "addStaff":
+                        oos.reset();
+                        oos.writeObject(new Message("New Staff Was Added \nWith Staff ID: "
+                                + dbManager.addStaff(msg.getStaff().getFirstName(), msg.getStaff().getLastName(),
+                                        msg.getStaff().getOffice(), msg.getStaff().getEmail(), msg.getStaff().getPhoneNo())));
+                        oos.flush();
+                        break;
+                    case "addUser":
+                        System.out.println("creating user");
+                        dbManager.addUser(msg.getUser().getUsername(), msg.getUser().getStaffID(), msg.getUser().getPassword(), msg.getUser().getIsAdmin());
+                        oos.reset();
+                        oos.writeObject(new Message("New User: " + msg.getUname() + " Was Added"));
+                        oos.flush();
+                        break;
+                    //    
+                    //
+                    //
                     default:
                         System.out.println("no option found");
                         break;
@@ -194,29 +211,24 @@ public class ServerMain {
             }
         } catch (Exception e) {
             System.out.println("error - at start thread" + e);
+            //oos.writeObject(new M);
         }
     }
-
-    static public void Vuser(String uname, String upass) throws SQLException {//using boolean if user verified or not
-        DatabaseManager databaseManager = new DatabaseManager("admin12345", "pass", "jdbc:derby://localhost:1527/ppRoom");
-        databaseManager.verifyUser(uname, upass);
-        if (databaseManager.verifyUser(uname, upass) == true) {
-            usrVld = true;
-        } else {
-            usrVld = false;
-        }
-    }
-
-    static public void isAdmin(String uname) throws SQLException {
-        DatabaseManager databaseManager = new DatabaseManager("admin12345", "pass", "jdbc:derby://localhost:1527/ppRoom");
-        databaseManager.validateUser(uname);
-        if (databaseManager.validateUser(uname) == true) {
-            userPriv = true;
-            System.out.println("user admin");
-        } else {
-            userPriv = false;
-            System.out.println("user not admin");
-        }
-    }
+//
+//    static public void verifyUsers(String uname, String upass) throws SQLException {//using boolean if user verified or not
+//        if (dbManager.verifyUser(uname, upass) == true) {
+//            userValid = true;
+//        } else {
+//            userValid = false;
+//        }
+//    }
+//
+//    static public void isAdmin(String uname) throws SQLException {
+//        if (dbManager.validateUser(uname) == true) {
+//            userPriv = true;
+//        } else {
+//            userPriv = false;
+//        }
+//    }
 
 }

@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 public class LoginController {
 
-    public static String ress;
+    public static String ress = "";
 
     @FXML
     Label res;
@@ -32,12 +32,11 @@ public class LoginController {
                 Main.serverConn(txtUsername.getText(), txtPassword.getText());
 
                 res.setText(ress);
-                //((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
             }catch (Exception ex){
                 System.out.println(ex);
             }
         }else{
-            res.setText("Username and password cannot be empty!");
+            res.setText("Username and password \ncannot be empty!");
         }
     }
 

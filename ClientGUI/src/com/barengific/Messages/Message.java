@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
  * @author barengific
  */
 public class Message implements Serializable {
@@ -25,14 +24,13 @@ public class Message implements Serializable {
     ArrayList<User> arrUser;
 
     /**
-     *
      * @param arrBooking
      */
-    public Message() {
-    }
-
     public Message(ArrayList<Booking> arrBooking) {
         this.arrBooking = arrBooking;
+    }
+
+    public Message() {
     }
 
     public Message(ArrayList<Booking> arrBooking, ArrayList<Room> arrRoom, ArrayList<Staff> arrStaff, ArrayList<User> arrUser) {
@@ -179,18 +177,6 @@ public class Message implements Serializable {
 
     public void setOps(String ops) {
         this.ops = ops;
-    }
-
-    public String getUname() {
-        return user.getUsername();
-    }
-
-    public String getPwd() {
-        return user.getPassword();
-    }
-
-    public boolean getIsAdmin() {
-        return user.getIsAdmin();
     }
 
     public String getRmUser() {
