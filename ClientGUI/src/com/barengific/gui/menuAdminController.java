@@ -200,14 +200,18 @@ public class MenuAdminController {
     }
 
     public void resetUser() {
-        if (!txtAddUsername.getText().equals("") && !txtAddUserpass.getText().equals("")) {
-            Main.serverInvoke(new Message("resetUser", new User(txtAddUsername.getText(), txtAddUserpass.getText())));
-            taFromServer.setText(outFromServer);
-
-            txtAddUsername.clear();
-            txtAddUserpass.clear();
+        if (isa = false && txtAddUsername.getText().equals(usern)) {
+            taFromServer.setText("Caution: You Are Not An Admin!\nYou Cannot Only Change Your Own Password");
         } else {
-            taFromServer.setText("Username and New Password \nCannot Be Empty");
+            if (!txtAddUsername.getText().equals("") && !txtAddUserpass.getText().equals("")) {
+                Main.serverInvoke(new Message("resetUser", new User(txtAddUsername.getText(), txtAddUserpass.getText())));
+                taFromServer.setText(outFromServer);
+
+                txtAddUsername.clear();
+                txtAddUserpass.clear();
+            } else {
+                taFromServer.setText("Username and New Password \nCannot Be Empty");
+            }
         }
     }
 
@@ -272,41 +276,49 @@ public class MenuAdminController {
     }
 
     public void addStaff() {
-        if (!txtFirstname.getText().equals("") && !txtLastname.getText().equals("") && !txtOffice.getText().equals("")
-                && !txtEmail.getText().equals("") && !txtStaffPhone.getText().equals("")) {
-            if (isInteger(txtOffice.getText()) && isInteger(txtStaffPhone.getText())) {
-                Main.serverInvoke(new Message("addStaff", new Staff(txtFirstname.getText(), txtLastname.getText(),
-                        Integer.parseInt(txtOffice.getText()), txtEmail.getText(), Long.parseLong(txtStaffPhone.getText()))));
-                taFromServer.setText(outFromServer);
-                txtFirstname.clear();
-                txtLastname.clear();
-                txtOffice.clear();
-                txtEmail.clear();
-                txtStaffPhone.clear();
+        if(isa == true) {
+            if (!txtFirstname.getText().equals("") && !txtLastname.getText().equals("") && !txtOffice.getText().equals("")
+                    && !txtEmail.getText().equals("") && !txtStaffPhone.getText().equals("")) {
+                if (isInteger(txtOffice.getText()) && isInteger(txtStaffPhone.getText())) {
+                    Main.serverInvoke(new Message("addStaff", new Staff(txtFirstname.getText(), txtLastname.getText(),
+                            Integer.parseInt(txtOffice.getText()), txtEmail.getText(), Long.parseLong(txtStaffPhone.getText()))));
+                    taFromServer.setText(outFromServer);
+                    txtFirstname.clear();
+                    txtLastname.clear();
+                    txtOffice.clear();
+                    txtEmail.clear();
+                    txtStaffPhone.clear();
+                } else {
+
+                }
             } else {
-                taFromServer.setText("Staff Office No# And Phone No# Must Be An Integer!");
+                taFromServer.setText("Staff First Name, Last Name, Office No#, \nEmail and Phone No# Cannot Be Empty!");
             }
-        } else {
-            taFromServer.setText("Staff First Name, Last Name, Office No#, \nEmail and Phone No# Cannot Be Empty!");
+        }else{
+            taFromServer.setText("You Are Not An Admin, Error Adding Staff");
         }
     }
 
     public void addUser() {
-        if (!txtAddUsername.getText().equals("") && !txtAdduserStaff.getText().equals("") && !txtAddUserpass.getText().equals("")) {
-            if (isInteger(txtAdduserStaff.getText())) {
-                Main.serverInvoke(new Message("addUser", new User(txtAddUsername.getText(), Integer.parseInt(txtAdduserStaff.getText()),
-                        txtAddUserpass.getText(), ckbxIsAdmin.isSelected())));
-                taFromServer.setText(outFromServer);
+        if(isa = true) {
+            if (!txtAddUsername.getText().equals("") && !txtAdduserStaff.getText().equals("") && !txtAddUserpass.getText().equals("")) {
+                if (isInteger(txtAdduserStaff.getText())) {
+                    Main.serverInvoke(new Message("addUser", new User(txtAddUsername.getText(), Integer.parseInt(txtAdduserStaff.getText()),
+                            txtAddUserpass.getText(), ckbxIsAdmin.isSelected())));
+                    taFromServer.setText(outFromServer);
 
-                txtAddUsername.clear();
-                txtAddUserpass.clear();
-                txtAdduserStaff.clear();
-                ckbxIsAdmin.disarm();
+                    txtAddUsername.clear();
+                    txtAddUserpass.clear();
+                    txtAdduserStaff.clear();
+                    ckbxIsAdmin.disarm();
+                } else {
+
+                }
             } else {
-                taFromServer.setText("Staff ID Must Be An Integer!");
+                taFromServer.setText("Username, Password And \nStaff ID Cannot Be Empty!");
             }
-        } else {
-            taFromServer.setText("Username, Password And \nStaff ID Cannot Be Empty!");
+        }else{
+            taFromServer.setText("You Are Not An Admin, Error Adding User");
         }
     }
 
@@ -342,26 +354,34 @@ public class MenuAdminController {
     }
 
     public void removeStaff() {
-        if (!txtRemoveStaff.getText().equals("")) {
-            if (isInteger(txtRemoveStaff.getText())) {
-                Main.serverInvoke(new Message("removeStaff", Integer.parseInt(txtRemoveStaff.getText())));
-                taFromServer.setText(outFromServer);
-                txtRemoveStaff.clear();
+        if(isa = true) {
+            if (!txtRemoveStaff.getText().equals("")) {
+                if (isInteger(txtRemoveStaff.getText())) {
+                    Main.serverInvoke(new Message("removeStaff", Integer.parseInt(txtRemoveStaff.getText())));
+                    taFromServer.setText(outFromServer);
+                    txtRemoveStaff.clear();
+                } else {
+                    taFromServer.setText("Remove Staff ID Must Be An Integer!");
+                }
             } else {
-                taFromServer.setText("Remove Staff ID Must Be An Integer!");
+                taFromServer.setText("Remove Staff ID Cannot Be Empty!");
             }
-        } else {
-            taFromServer.setText("Remove Staff ID Cannot Be Empty!");
+        }else{
+            taFromServer.setText("You Are Not An Admin, Error Removing Staff");
         }
     }
 
     public void removeUser() {
-        if (!txtRemoveUser.getText().equals("")) {
-            Main.serverInvoke(new Message("removeUser", txtRemoveUser.getText()));
-            taFromServer.setText(outFromServer);
-            txtRemoveUser.clear();
-        } else {
-            taFromServer.setText("Remove Username Cannot Be Empty!");
+        if(isa = true) {
+            if (!txtRemoveUser.getText().equals("")) {
+                Main.serverInvoke(new Message("removeUser", txtRemoveUser.getText()));
+                taFromServer.setText(outFromServer);
+                txtRemoveUser.clear();
+            } else {
+                taFromServer.setText("Remove Username Cannot Be Empty!");
+            }
+        }else{
+            taFromServer.setText("You Are Not An Admin, Error Removing User");
         }
     }
 
